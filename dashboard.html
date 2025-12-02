@@ -447,25 +447,33 @@
   </div>
 
   <!-- Firebase + Auth + Firestore -->
-  <<script type="module">
-  // Year
-  document.getElementById("year").textContent = new Date().getFullYear();
+  <script type="module">
+  // নিচের span এর জন্য বছর সেট করি
+  const yearEl = document.getElementById("year");
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
 
+  // ==== তোমার নতুন Apps Script URL ====
+  const BRIDGE_API_URL = "https://script.google.com/macros/s/AKfycbwUMn-tpNUlbaOoYQLA_7RRS_geJ-Vl0z1gLs8goCMB62yyXaTeJr4xKU3SRZGnoIMK/exec";
+
+  async function callTrialApi(action, email) {
+    const res = await fetch(BRIDGE_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action, email }),
+    });
+    return await res.json();
+  }
+
+  // ===== Firebase imports =====
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
   import {
     getAuth,
     onAuthStateChanged,
-    signOut
+    signOut,
   } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-  import {
-    getFirestore,
-    doc,
-    getDoc,
-    setDoc,
-    serverTimestamp
-  } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
+  // ===== Firebase config (তোমারটাই) =====
   const firebaseConfig = {
     apiKey: "AIzaSyA_lZmfn4T31B6jm1dB0UywR7OEgYIPlo0",
     authDomain: "sceneflow-studio.firebaseapp.com",
@@ -473,32 +481,33 @@
     storageBucket: "sceneflow-studio.firebasestorage.app",
     messagingSenderId: "961327164320",
     appId: "1:961327164320:web:7ffb160db2529f4c1412c5",
-    measurementId: "G-56962H6FQ4"
+    measurementId: "G-56962H6FQ4",
   };
 
   const app = initializeApp(firebaseConfig);
   getAnalytics(app);
   const auth = getAuth(app);
-  const db   = getFirestore(app);
 
-  const navUsername   = document.getElementById("nav-username");
-  const dashUsername  = document.getElementById("dash-username");
-  const dashEmail     = document.getElementById("dash-email");
-  const planNameEl    = document.getElementById("plan-name");
-  const planStatusEl  = document.getElementById("plan-status");
+  // ===== DOM এলিমেন্টগুলো =====
+  const navUsername     = document.getElementById("nav-username");
+  const dashUsername    = document.getElementById("dash-username");
+  const dashEmail       = document.getElementById("dash-email");
+  const planNameEl      = document.getElementById("plan-name");
+  const planStatusEl    = document.getElementById("plan-status");
   const requestTrialBtn = document.getElementById("request-trial-btn");
   const trialMessage    = document.getElementById("trial-message");
   const trialKeyBox     = document.getElementById("trial-key-box");
   const trialKeyText    = document.getElementById("trial-key-text");
+  const logoutBtn       = document.getElementById("logout-btn");
 
   let currentUser = null;
 
   function setText(el, text) {
-    if (!el) return;
-    el.textContent = text;
+    if (el) el.textContent = text;
   }
 
   function showTrialKey(key) {
+    if (!trialKeyBox || !trialKeyText) return;
     if (!key) {
       trialKeyBox.style.display = "none";
       return;
@@ -507,141 +516,136 @@
     trialKeyText.textContent = key;
   }
 
-  // Firestore থেকে লাইসেন্স ডাটা লোড
-  async function loadLicenseInfo(user) {
-    try {
-      const licRef = doc(db, "licenses", user.uid);
-      const snap  = await getDoc(licRef);
-
+  // Apps Script থেকে আসা রেসপন্স দিয়ে UI আপডেট
+  function updateTrialUI(data) {
+    if (!data || data.status !== "ok") {
+      const msg = data && data.message ? data.message : "Could not load trial info.";
+      if (trialMessage) trialMessage.textContent = "Error: " + msg;
+      if (requestTrialBtn) {
+        requestTrialBtn.disabled = true;
+        requestTrialBtn.textContent = "Error";
+      }
       showTrialKey(null);
+      return;
+    }
 
-      if (!snap.exists()) {
-        setText(planNameEl, "Free / Trial (not requested)");
-        setText(planStatusEl, "Free");
-        trialMessage.textContent = "You have not requested a trial yet.";
+    const state = data.state; // none | active | expired | already_active | created
+
+    // এখন পর্যন্ত key (থাকলে)
+    const key = data.license_key || "";
+    const expiry = data.expiry || "";
+
+    if (state === "none") {
+      setText(planNameEl, "Free / Trial (not requested)");
+      setText(planStatusEl, "Free");
+      if (trialMessage)
+        trialMessage.textContent = "You can request a 3-day free trial.";
+      showTrialKey(null);
+      if (requestTrialBtn) {
         requestTrialBtn.disabled = false;
         requestTrialBtn.textContent = "Request 3-Day Free Trial";
-        return;
       }
+      return;
+    }
 
-      const data     = snap.data();
-      const status   = data.status   || "free";
-      const planType = data.planType || "free";
-
-      // Lifetime / Monthly প্ল্যান: key দেখানোর দরকার নেই
-      if (planType === "lifetime") {
-        setText(planNameEl, "Lifetime plan");
-        setText(planStatusEl, status === "active" ? "Active" : status);
-        trialMessage.textContent = "You have an active lifetime license.";
-        requestTrialBtn.disabled = true;
-        requestTrialBtn.textContent = "Lifetime active";
-        return;
-      }
-      if (planType === "monthly") {
-        setText(planNameEl, "Monthly plan");
-        setText(planStatusEl, status === "active" ? "Active" : status);
-        trialMessage.textContent = "Your monthly plan is active.";
-        requestTrialBtn.disabled = true;
-        requestTrialBtn.textContent = "Monthly active";
-        return;
-      }
-
-      // Trial
-      if (status === "active" && planType === "trial") {
-        setText(planNameEl, "Trial (active)");
-        setText(planStatusEl, "Active");
+    if (state === "active" || state === "already_active" || state === "created") {
+      setText(planNameEl, "Trial (active)");
+      setText(planStatusEl, "Active");
+      if (trialMessage)
         trialMessage.textContent =
-          "Your 3-day trial is active. Use the key below inside the software.";
+          "Your 3-day trial is active. Use the key below inside the software." +
+          (expiry ? " Expires at: " + expiry : "");
+      showTrialKey(key);
+      if (requestTrialBtn) {
         requestTrialBtn.disabled = true;
         requestTrialBtn.textContent = "Trial active";
-        if (data.trialKey) showTrialKey(data.trialKey);
-      } else if (status === "pending" && planType === "trial") {
-        setText(planNameEl, "Trial (pending)");
-        setText(planStatusEl, "Pending");
+      }
+      return;
+    }
+
+    if (state === "expired") {
+      setText(planNameEl, "Trial (expired)");
+      setText(planStatusEl, "Expired");
+      if (trialMessage)
         trialMessage.textContent =
-          "Your trial request is pending. We’ll add a key for you soon.";
-        requestTrialBtn.disabled = true;
-        requestTrialBtn.textContent = "Trial requested";
-        if (data.trialKey) showTrialKey(data.trialKey); // যদি তুমি আগেই লিখে দাও
-      } else if (status === "expired" && planType === "trial") {
-        setText(planNameEl, "Trial (expired)");
-        setText(planStatusEl, "Expired");
-        trialMessage.textContent = "Your 3-day trial has expired.";
+          "Your 3-day trial has expired." +
+          (expiry ? " Expired at: " + expiry : "");
+      showTrialKey(key);
+      if (requestTrialBtn) {
         requestTrialBtn.disabled = true;
         requestTrialBtn.textContent = "Trial expired";
-      } else {
-        setText(planNameEl, "Free / Trial");
-        setText(planStatusEl, "Free");
-        trialMessage.textContent = "You can request a 3-day free trial.";
-        requestTrialBtn.disabled = false;
-        requestTrialBtn.textContent = "Request 3-Day Free Trial";
       }
-    } catch (err) {
-      console.error("Load license error:", err);
-      trialMessage.textContent = "Could not load plan info (" + err.message + ")";
+      return;
     }
+
+    // অন্য যেকোনো অজানা স্টেট
+    if (trialMessage)
+      trialMessage.textContent = "Unknown state: " + state;
+    showTrialKey(key);
+    if (requestTrialBtn) requestTrialBtn.disabled = true;
   }
 
-  // লগইন চেক
+  // ===== Auth state =====
   onAuthStateChanged(auth, async (user) => {
     if (!user) {
       window.location.href = "index.html#auth";
       return;
     }
     currentUser = user;
-    const name = user.displayName || user.email;
-    if (navUsername)  navUsername.textContent  = "Welcome, " + name;
-    if (dashUsername) dashUsername.textContent = name;
-    if (dashEmail)    dashEmail.textContent    = user.email || "";
 
-    await loadLicenseInfo(user);
+    const email = (user.email || "").toLowerCase();
+
+    setText(navUsername, "Welcome, " + (user.displayName || email));
+    setText(dashUsername, user.displayName || email);
+    setText(dashEmail, email);
+
+    try {
+      const data = await callTrialApi("trial_status", email);
+      updateTrialUI(data);
+    } catch (err) {
+      console.error("trial_status error:", err);
+      if (trialMessage)
+        trialMessage.textContent = "Error loading trial status.";
+    }
   });
 
-  // Trial request: শুধু প্রথমবার ডকুমেন্ট create করবে, কোনো key জেনারেট করবে না
+  // ===== Trial request বোতাম =====
   if (requestTrialBtn) {
     requestTrialBtn.addEventListener("click", async () => {
       if (!currentUser) return;
+      const email = (currentUser.email || "").toLowerCase();
+
+      requestTrialBtn.disabled = true;
+      requestTrialBtn.textContent = "Requesting...";
 
       try {
-        const licRef = doc(db, "licenses", currentUser.uid);
-        const snap  = await getDoc(licRef);
-
-        if (snap.exists()) {
-          // Safety: rule থাকলেও, UI থেকেও ব্লক করছি
-          alert("You have already requested or used your trial.");
-          await loadLicenseInfo(currentUser);
-          return;
+        const data = await callTrialApi("trial_create", email);
+        if (data.status !== "ok" && data.message) {
+          alert("Error: " + data.message);
         }
-
-        await setDoc(
-          licRef,
-          {
-            email: currentUser.email,
-            planType: "trial",
-            status: "pending",       // তুমি পরে Console থেকে 'active' করবে
-            requestedAt: serverTimestamp()
-          }
-        );
-
-        alert("✅ Trial request sent! We will add a key for you soon.");
-        await loadLicenseInfo(currentUser);
+        updateTrialUI(data);
       } catch (err) {
-        console.error("Trial request error:", err);
-        alert("❌ Trial request failed: " + err.message);
+        console.error("trial_create error:", err);
+        alert("Network error: " + err);
+        requestTrialBtn.disabled = false;
+        requestTrialBtn.textContent = "Request 3-Day Free Trial";
       }
     });
   }
 
-  // Logout
-  const logoutBtn = document.getElementById("logout-btn");
+  // ===== Logout বোতাম =====
   if (logoutBtn) {
     logoutBtn.addEventListener("click", async () => {
-      await signOut(auth);
-      alert("🔓 Logged out");
+      try {
+        await signOut(auth);
+      } catch (e) {
+        console.error(e);
+      }
       window.location.href = "index.html";
     });
   }
 </script>
+
 
 </body>
 </html>
