@@ -27,6 +27,7 @@
       max-width: 1200px;
       margin: 0 auto;
     }
+    .hidden { display: none !important; }
 
     /* Navbar */
     header {
@@ -64,7 +65,16 @@
     .nav-actions {
       display: flex;
       gap: 10px;
+      align-items: center;
     }
+    .user-pill {
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.25);
+      font-size: 0.85rem;
+    }
+
     .btn {
       padding: 8px 18px;
       border-radius: 999px;
@@ -380,6 +390,70 @@
       color: rgba(255,255,255,0.7);
     }
 
+    /* Dashboard */
+    .dashboard-section {
+      padding: 50px 0 60px;
+    }
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .dashboard-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+    .dashboard-sub {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.75);
+    }
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: minmax(0,1.4fr) minmax(0,1fr);
+      gap: 20px;
+    }
+    .dashboard-card {
+      background: radial-gradient(circle at top,#1b1c4a,#050218);
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 18px 18px 20px;
+      box-shadow: 0 22px 60px rgba(0,0,0,0.9);
+    }
+    .dashboard-card h3 {
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+    }
+    .dashboard-card p {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 12px;
+    }
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.15);
+      font-size: 0.8rem;
+    }
+    .download-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .download-links small {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.75);
+    }
+
     /* Footer */
     footer {
       border-top: 1px solid rgba(255,255,255,0.08);
@@ -414,6 +488,7 @@
       }
       .nav-links { display: none; }
       .auth-layout { grid-template-columns: 1fr; }
+      .dashboard-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 640px) {
       .features-grid,
@@ -437,9 +512,18 @@
         <a href="#pricing">Pricing</a>
         <a href="#auth">Sign Up / Login</a>
       </nav>
-      <div class="nav-actions">
+
+      <!-- Logged-out buttons -->
+      <div class="nav-actions" id="nav-logged-out">
         <a href="#auth" class="btn btn-outline">Log in</a>
         <a href="#auth" class="btn btn-primary">Try it Free</a>
+      </div>
+
+      <!-- Logged-in user menu -->
+      <div class="nav-actions hidden" id="nav-logged-in">
+        <div class="user-pill" id="nav-username">Welcome, User</div>
+        <button class="btn btn-outline" id="go-dashboard">Dashboard</button>
+        <button class="btn btn-primary" id="logout-btn">Log out</button>
       </div>
     </div>
   </header>
@@ -552,12 +636,12 @@
 
       <div class="price-card popular">
         <div class="price-name">Monthly Pro</div>
-        <div class="price-value">$39 <span>/ প্রতি মাস</span></div>
+        <div class="price-value">$39 <span>/ per month</span></div>
         <ul class="price-features">
-          <li>আনলিমিটেড প্রোজেক্ট</li>
-          <li>সব প্রো ফিচার আনলক</li>
-          <li>4K Export, অটোমেশন টুল</li>
-          <li>প্রায়োরিটি সাপোর্ট</li>
+          <li>Unlimited projects</li>
+          <li>All pro features unlocked</li>
+          <li>4K export & automation tools</li>
+          <li>Priority support</li>
         </ul>
         <a href="#auth" class="btn btn-primary" style="width:100%;justify-content:center;">
           Start Monthly Plan
@@ -567,11 +651,11 @@
       <div class="price-card">
         <div class="price-name">Lifetime Access</div>
         <div class="price-old">$897</div>
-        <div class="price-value">$499 <span>/ একবার পেমেন্ট</span></div>
+        <div class="price-value">$499 <span>/ one-time</span></div>
         <ul class="price-features">
           <li>Lifetime updates</li>
-          <li>কমার্শিয়াল লাইসেন্স</li>
-          <li>VIP সাপোর্ট</li>
+          <li>Commercial license</li>
+          <li>VIP support</li>
         </ul>
         <a href="#auth" class="btn btn-outline" style="width:100%;justify-content:center;">
           Get Lifetime Deal
@@ -597,11 +681,11 @@
           </li>
           <li>
             <span class="auth-step-badge">2</span>
-            <span>ইমেইল দিয়ে লগ ইন করুন</span>
+            <span>ইমেইল দিয়ে Login করুন</span>
           </li>
           <li>
             <span class="auth-step-badge">3</span>
-            <span>ড্যাশবোর্ড থেকে সফটওয়্যার ডাউনলোড / অ্যাক্সেস করুন</span>
+            <span>Dashboard থেকে software download করুন</span>
           </li>
         </ul>
       </div>
@@ -616,12 +700,12 @@
         <!-- SIGN UP FORM -->
         <form id="signup-form" class="auth-form active">
           <div class="auth-group">
-            <label for="su-name">পূর্ণ নাম*</label>
-            <input id="su-name" name="name" required placeholder="আপনার নাম" />
+            <label for="su-name">Full name*</label>
+            <input id="su-name" name="name" required placeholder="Your name" />
           </div>
 
           <div class="auth-group">
-            <label for="su-email">ইমেইল অ্যাড্রেস*</label>
+            <label for="su-email">Email address*</label>
             <input
               id="su-email"
               type="email"
@@ -632,13 +716,13 @@
           </div>
 
           <div class="auth-group">
-            <label for="su-password">পাসওয়ার্ড*</label>
+            <label for="su-password">Password*</label>
             <input
               id="su-password"
               type="password"
               name="password"
               required
-              placeholder="কমপক্ষে ৬ অক্ষর"
+              placeholder="Minimum 6 characters"
             />
           </div>
 
@@ -647,20 +731,20 @@
           </button>
 
           <p class="auth-note">
-            Sign Up আপনার ইমেইল পাসওয়ার্ড মনে রাখুন ।
-            একই ইমেইল দিয়ে পরে লগ ইন করতে পারবেন।
+            Your account will be created in Firebase Authentication. You can log in
+            later with the same email & password.
           </p>
         </form>
 
         <!-- LOGIN FORM -->
         <form id="login-form" class="auth-form">
           <div class="auth-group">
-            <label for="li-email">ইমেইল</label>
-            <input id="li-email" type="email" placeholder="আপনার ইমেইল" />
+            <label for="li-email">Email</label>
+            <input id="li-email" type="email" placeholder="Your email" />
           </div>
           <div class="auth-group">
-            <label for="li-password">পাসওয়ার্ড</label>
-            <input id="li-password" type="password" placeholder="আপনার পাসওয়ার্ড" />
+            <label for="li-password">Password</label>
+            <input id="li-password" type="password" placeholder="Your password" />
           </div>
 
           <button type="submit" class="btn btn-outline" style="width:100%;justify-content:center;">
@@ -669,6 +753,62 @@
 
           <p class="auth-note" id="login-status"></p>
         </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dashboard (only when logged in) -->
+  <section id="dashboard" class="container dashboard-section hidden">
+    <div class="dashboard-header">
+      <div>
+        <div class="dashboard-title">Welcome, <span id="dash-username">User</span></div>
+        <div class="dashboard-sub">
+          You are logged in. Manage your license and downloads from here.
+        </div>
+      </div>
+      <div>
+        <button class="btn btn-outline" id="dash-logout">Log out</button>
+      </div>
+    </div>
+
+    <div class="dashboard-grid">
+      <div class="dashboard-card">
+        <h3>Your Product</h3>
+        <p>Dream Automation – All-in-one automation software for your business.</p>
+        <div class="pill-row">
+          <span class="pill">AI-powered</span>
+          <span class="pill">1-click workflows</span>
+          <span class="pill">Lifetime updates (for lifetime plan)</span>
+        </div>
+        <div class="download-links">
+          <a
+            href="#"
+            class="btn btn-primary"
+            style="justify-content:center;"
+          >
+            ⬇ Download Software
+          </a>
+          <small>Note: Replace this link with your real download URL (e.g. Google Drive / your server).</small>
+
+          <a
+            href="#"
+            class="btn btn-outline"
+            style="justify-content:center;margin-top:4px;"
+          >
+            💳 Buy Lifetime Access
+          </a>
+          <small>Replace with your checkout link (Gumroad, LemonSqueezy, etc.).</small>
+        </div>
+      </div>
+
+      <div class="dashboard-card">
+        <h3>Account Overview</h3>
+        <p>Basic account info (email, current plan, next steps).</p>
+        <ul style="font-size:0.9rem; padding-left:18px;">
+          <li>Email: <span id="dash-email">example@email.com</span></li>
+          <li>Plan: <strong>Free / Trial</strong> (static text – you can change manually)</li>
+          <li>Status: <strong>Active</strong></li>
+        </ul>
       </div>
     </div>
   </section>
@@ -695,17 +835,25 @@
     // Auth tabs toggle
     const tabs = document.querySelectorAll(".auth-tab");
     const forms = document.querySelectorAll(".auth-form");
-
     tabs.forEach((tab) => {
       tab.addEventListener("click", () => {
         tabs.forEach((t) => t.classList.remove("active"));
         forms.forEach((f) => f.classList.remove("active"));
-
         tab.classList.add("active");
         const targetId = tab.getAttribute("data-target");
-        document.getElementById(targetId).classList.add("active");
+        const form = document.getElementById(targetId);
+        if (form) form.classList.add("active");
       });
     });
+
+    // Smooth scroll to dashboard button
+    const goDashBtn = document.getElementById("go-dashboard");
+    if (goDashBtn) {
+      goDashBtn.addEventListener("click", () => {
+        const dash = document.getElementById("dashboard");
+        if (dash) dash.scrollIntoView({ behavior: "smooth" });
+      });
+    }
 
     // ---------- Firebase Setup ----------
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
@@ -733,6 +881,14 @@
     getAnalytics(app);
     const auth = getAuth(app);
 
+    const navLoggedOut = document.getElementById("nav-logged-out");
+    const navLoggedIn = document.getElementById("nav-logged-in");
+    const navUsername = document.getElementById("nav-username");
+    const dashSection = document.getElementById("dashboard");
+    const dashUsername = document.getElementById("dash-username");
+    const dashEmail = document.getElementById("dash-email");
+    const authSection = document.getElementById("auth");
+
     // SIGN UP handler
     const signupForm = document.getElementById("signup-form");
     if (signupForm) {
@@ -751,7 +907,7 @@
           if (name) {
             await updateProfile(cred.user, { displayName: name });
           }
-          alert("✅ Sign up সফল! এখন Login ট্যাবে গিয়ে লগ ইন করুন।");
+          alert("✅ Sign up successful! You can now log in.");
           signupForm.reset();
         } catch (err) {
           alert("❌ Sign up error: " + err.message);
@@ -773,26 +929,51 @@
 
         try {
           await signInWithEmailAndPassword(auth, email, password);
-          if (loginStatus) loginStatus.textContent = "🎉 Login সফল!";
+          if (loginStatus) loginStatus.textContent = "🎉 Login successful!";
+          // Dashboard দেখানোর কাজ onAuthStateChanged এ হবে
         } catch (err) {
           if (loginStatus) loginStatus.textContent = "❌ Login error: " + err.message;
         }
       });
     }
 
-    // Listen auth state (ডিবাগের জন্য)
+    // Auth state change – এখানে আমরা UI টগল করবো
     onAuthStateChanged(auth, (user) => {
       console.log("Current user:", user);
+
+      if (user) {
+        // logged in
+        if (navLoggedOut) navLoggedOut.classList.add("hidden");
+        if (navLoggedIn) navLoggedIn.classList.remove("hidden");
+        const name = user.displayName || user.email;
+        if (navUsername) navUsername.textContent = "Welcome, " + name;
+        if (dashUsername) dashUsername.textContent = name;
+        if (dashEmail) dashEmail.textContent = user.email || "";
+
+        if (dashSection) dashSection.classList.remove("hidden");
+        if (authSection) authSection.classList.add("hidden");
+      } else {
+        // logged out
+        if (navLoggedOut) navLoggedOut.classList.remove("hidden");
+        if (navLoggedIn) navLoggedIn.classList.add("hidden");
+        if (dashSection) dashSection.classList.add("hidden");
+        if (authSection) authSection.classList.remove("hidden");
+      }
     });
 
-    // Optional logout button (ভবিষ্যতে লাগলে)
+    // Logout buttons (navbar + dashboard)
     const logoutBtn = document.getElementById("logout-btn");
-    if (logoutBtn) {
-      logoutBtn.addEventListener("click", async () => {
+    const dashLogout = document.getElementById("dash-logout");
+
+    const attachLogout = (btn) => {
+      if (!btn) return;
+      btn.addEventListener("click", async () => {
         await signOut(auth);
         alert("🔓 Logged out");
       });
-    }
+    };
+    attachLogout(logoutBtn);
+    attachLogout(dashLogout);
   </script>
 </body>
 </html>
