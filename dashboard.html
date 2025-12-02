@@ -447,204 +447,201 @@
   </div>
 
   <!-- Firebase + Auth + Firestore -->
-  <script type="module">
-    // Year
-    document.getElementById("year").textContent = new Date().getFullYear();
+  <<script type="module">
+  // Year
+  document.getElementById("year").textContent = new Date().getFullYear();
 
-    // ======= CONFIG: এখানে তুমি ট্রাইল key গুলো যোগ করবে =======
-    const TRIAL_KEYS = [
-      "B0EF4F1C-7D7E-4CE6-83E9-71A42EBA9571",
-      "B0EF4F1C-AAAA-4CE6-83E9-71A42EBA0000",
-      "B0EF4F1C-BBBB-4CE6-83E9-71A42EBA1111"
-      // চাইলে আরো key যোগ করো
-    ];
-    function getRandomTrialKey() {
-      const i = Math.floor(Math.random() * TRIAL_KEYS.length);
-      return TRIAL_KEYS[i];
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
+  import {
+    getAuth,
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+  import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyA_lZmfn4T31B6jm1dB0UywR7OEgYIPlo0",
+    authDomain: "sceneflow-studio.firebaseapp.com",
+    projectId: "sceneflow-studio",
+    storageBucket: "sceneflow-studio.firebasestorage.app",
+    messagingSenderId: "961327164320",
+    appId: "1:961327164320:web:7ffb160db2529f4c1412c5",
+    measurementId: "G-56962H6FQ4"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  getAnalytics(app);
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
+
+  const navUsername   = document.getElementById("nav-username");
+  const dashUsername  = document.getElementById("dash-username");
+  const dashEmail     = document.getElementById("dash-email");
+  const planNameEl    = document.getElementById("plan-name");
+  const planStatusEl  = document.getElementById("plan-status");
+  const requestTrialBtn = document.getElementById("request-trial-btn");
+  const trialMessage    = document.getElementById("trial-message");
+  const trialKeyBox     = document.getElementById("trial-key-box");
+  const trialKeyText    = document.getElementById("trial-key-text");
+
+  let currentUser = null;
+
+  function setText(el, text) {
+    if (!el) return;
+    el.textContent = text;
+  }
+
+  function showTrialKey(key) {
+    if (!key) {
+      trialKeyBox.style.display = "none";
+      return;
     }
-    // =========================================================
+    trialKeyBox.style.display = "block";
+    trialKeyText.textContent = key;
+  }
 
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
-    import {
-      getAuth,
-      onAuthStateChanged,
-      signOut
-    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-    import {
-      getFirestore,
-      doc,
-      getDoc,
-      setDoc,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+  // Firestore থেকে লাইসেন্স ডাটা লোড
+  async function loadLicenseInfo(user) {
+    try {
+      const licRef = doc(db, "licenses", user.uid);
+      const snap  = await getDoc(licRef);
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyA_lZmfn4T31B6jm1dB0UywR7OEgYIPlo0",
-      authDomain: "sceneflow-studio.firebaseapp.com",
-      projectId: "sceneflow-studio",
-      storageBucket: "sceneflow-studio.firebasestorage.app",
-      messagingSenderId: "961327164320",
-      appId: "1:961327164320:web:7ffb160db2529f4c1412c5",
-      measurementId: "G-56962H6FQ4"
-    };
+      showTrialKey(null);
 
-    const app = initializeApp(firebaseConfig);
-    getAnalytics(app);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    const navUsername = document.getElementById("nav-username");
-    const dashUsername = document.getElementById("dash-username");
-    const dashEmail = document.getElementById("dash-email");
-
-    const planNameEl = document.getElementById("plan-name");
-    const planStatusEl = document.getElementById("plan-status");
-    const requestTrialBtn = document.getElementById("request-trial-btn");
-    const trialMessage = document.getElementById("trial-message");
-    const trialKeyBox = document.getElementById("trial-key-box");
-    const trialKeyText = document.getElementById("trial-key-text");
-
-    let currentUser = null;
-
-    function setText(el, text) {
-      if (!el) return;
-      el.textContent = text;
-    }
-
-    function showTrialKey(key) {
-      if (!key) {
-        trialKeyBox.style.display = "none";
+      if (!snap.exists()) {
+        setText(planNameEl, "Free / Trial (not requested)");
+        setText(planStatusEl, "Free");
+        trialMessage.textContent = "You have not requested a trial yet.";
+        requestTrialBtn.disabled = false;
+        requestTrialBtn.textContent = "Request 3-Day Free Trial";
         return;
       }
-      trialKeyBox.style.display = "block";
-      trialKeyText.textContent = key;
-    }
 
-    async function loadLicenseInfo(user) {
+      const data     = snap.data();
+      const status   = data.status   || "free";
+      const planType = data.planType || "free";
+
+      // Lifetime / Monthly প্ল্যান: key দেখানোর দরকার নেই
+      if (planType === "lifetime") {
+        setText(planNameEl, "Lifetime plan");
+        setText(planStatusEl, status === "active" ? "Active" : status);
+        trialMessage.textContent = "You have an active lifetime license.";
+        requestTrialBtn.disabled = true;
+        requestTrialBtn.textContent = "Lifetime active";
+        return;
+      }
+      if (planType === "monthly") {
+        setText(planNameEl, "Monthly plan");
+        setText(planStatusEl, status === "active" ? "Active" : status);
+        trialMessage.textContent = "Your monthly plan is active.";
+        requestTrialBtn.disabled = true;
+        requestTrialBtn.textContent = "Monthly active";
+        return;
+      }
+
+      // Trial
+      if (status === "active" && planType === "trial") {
+        setText(planNameEl, "Trial (active)");
+        setText(planStatusEl, "Active");
+        trialMessage.textContent =
+          "Your 3-day trial is active. Use the key below inside the software.";
+        requestTrialBtn.disabled = true;
+        requestTrialBtn.textContent = "Trial active";
+        if (data.trialKey) showTrialKey(data.trialKey);
+      } else if (status === "pending" && planType === "trial") {
+        setText(planNameEl, "Trial (pending)");
+        setText(planStatusEl, "Pending");
+        trialMessage.textContent =
+          "Your trial request is pending. We’ll add a key for you soon.";
+        requestTrialBtn.disabled = true;
+        requestTrialBtn.textContent = "Trial requested";
+        if (data.trialKey) showTrialKey(data.trialKey); // যদি তুমি আগেই লিখে দাও
+      } else if (status === "expired" && planType === "trial") {
+        setText(planNameEl, "Trial (expired)");
+        setText(planStatusEl, "Expired");
+        trialMessage.textContent = "Your 3-day trial has expired.";
+        requestTrialBtn.disabled = true;
+        requestTrialBtn.textContent = "Trial expired";
+      } else {
+        setText(planNameEl, "Free / Trial");
+        setText(planStatusEl, "Free");
+        trialMessage.textContent = "You can request a 3-day free trial.";
+        requestTrialBtn.disabled = false;
+        requestTrialBtn.textContent = "Request 3-Day Free Trial";
+      }
+    } catch (err) {
+      console.error("Load license error:", err);
+      trialMessage.textContent = "Could not load plan info (" + err.message + ")";
+    }
+  }
+
+  // লগইন চেক
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      window.location.href = "index.html#auth";
+      return;
+    }
+    currentUser = user;
+    const name = user.displayName || user.email;
+    if (navUsername)  navUsername.textContent  = "Welcome, " + name;
+    if (dashUsername) dashUsername.textContent = name;
+    if (dashEmail)    dashEmail.textContent    = user.email || "";
+
+    await loadLicenseInfo(user);
+  });
+
+  // Trial request: শুধু প্রথমবার ডকুমেন্ট create করবে, কোনো key জেনারেট করবে না
+  if (requestTrialBtn) {
+    requestTrialBtn.addEventListener("click", async () => {
+      if (!currentUser) return;
+
       try {
-        const licRef = doc(db, "licenses", user.uid);
-        const snap = await getDoc(licRef);
+        const licRef = doc(db, "licenses", currentUser.uid);
+        const snap  = await getDoc(licRef);
 
-        showTrialKey(null);
-
-        if (!snap.exists()) {
-          setText(planNameEl, "Free / Trial (not requested)");
-          setText(planStatusEl, "Free");
-          trialMessage.textContent = "You have not requested a trial yet.";
-          requestTrialBtn.disabled = false;
-          requestTrialBtn.textContent = "Request 3-Day Free Trial";
-          return;
-        }
-
-        const data = snap.data();
-        const status = data.status || "free";
-        const planType = data.planType || "free";
-
-        // Lifetime / Monthly – trial key দেখাব না
-        if (planType === "lifetime") {
-          setText(planNameEl, "Lifetime plan");
-          setText(planStatusEl, status === "active" ? "Active" : status);
-          trialMessage.textContent = "You have an active lifetime license.";
-          requestTrialBtn.disabled = true;
-          requestTrialBtn.textContent = "Lifetime active";
-          return;
-        }
-        if (planType === "monthly") {
-          setText(planNameEl, "Monthly plan");
-          setText(planStatusEl, status === "active" ? "Active" : status);
-          trialMessage.textContent = "Your monthly plan is active.";
-          requestTrialBtn.disabled = true;
-          requestTrialBtn.textContent = "Monthly active";
-          return;
-        }
-
-        // Trial / Free
-        if (status === "active" && planType === "trial") {
-          setText(planNameEl, "Trial (active)");
-          setText(planStatusEl, "Active");
-          trialMessage.textContent = "Your 3-day trial is active. Use the key below inside the software.";
-          requestTrialBtn.disabled = true;
-          requestTrialBtn.textContent = "Trial active";
-          if (data.trialKey) showTrialKey(data.trialKey);
-        } else if (status === "pending" && planType === "trial") {
-          setText(planNameEl, "Trial (pending)");
-          setText(planStatusEl, "Pending");
-          trialMessage.textContent = "Your 3-day trial request is pending.";
-          requestTrialBtn.disabled = true;
-          requestTrialBtn.textContent = "Trial requested";
-          if (data.trialKey) showTrialKey(data.trialKey);
-        } else {
-          setText(planNameEl, "Free / Trial");
-          setText(planStatusEl, "Free");
-          trialMessage.textContent = "You can request a 3-day free trial.";
-          requestTrialBtn.disabled = false;
-          requestTrialBtn.textContent = "Request 3-Day Free Trial";
-        }
-      } catch (err) {
-        console.error("Load license error:", err);
-        trialMessage.textContent = "Could not load plan info (" + err.message + ")";
-      }
-    }
-
-    // user logged in না থাকলে index.html এ পাঠিয়ে দাও
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        window.location.href = "index.html#auth";
-        return;
-      }
-      currentUser = user;
-      const name = user.displayName || user.email;
-      if (navUsername) navUsername.textContent = "Welcome, " + name;
-      if (dashUsername) dashUsername.textContent = name;
-      if (dashEmail) dashEmail.textContent = user.email || "";
-
-      await loadLicenseInfo(user);
-    });
-
-    // trial request handler
-    if (requestTrialBtn) {
-      requestTrialBtn.addEventListener("click", async () => {
-        if (!currentUser) return;
-
-        try {
-          const licRef = doc(db, "licenses", currentUser.uid);
-          const snap = await getDoc(licRef);
-          const existing = snap.exists() ? snap.data() : {};
-
-          // যদি আগে trialKey থাকে, সেটা রাখি, নইলে নতুন key দেই
-          const trialKey = existing.trialKey || getRandomTrialKey();
-
-          await setDoc(
-            licRef,
-            {
-              email: currentUser.email,
-              planType: "trial",
-              status: "active", // সরাসরি active করে দিচ্ছি
-              trialKey: trialKey,
-              requestedAt: serverTimestamp()
-            },
-            { merge: true }
-          );
-
-          alert("✅ Trial started! Your key is now visible on the dashboard.");
+        if (snap.exists()) {
+          // Safety: rule থাকলেও, UI থেকেও ব্লক করছি
+          alert("You have already requested or used your trial.");
           await loadLicenseInfo(currentUser);
-        } catch (err) {
-          console.error("Trial request error:", err);
-          alert("❌ Trial request failed: " + err.message);
+          return;
         }
-      });
-    }
 
-    // Logout
-    const logoutBtn = document.getElementById("logout-btn");
-    if (logoutBtn) {
-      logoutBtn.addEventListener("click", async () => {
-        await signOut(auth);
-        alert("🔓 Logged out");
-        window.location.href = "index.html";
-      });
-    }
-  </script>
+        await setDoc(
+          licRef,
+          {
+            email: currentUser.email,
+            planType: "trial",
+            status: "pending",       // তুমি পরে Console থেকে 'active' করবে
+            requestedAt: serverTimestamp()
+          }
+        );
+
+        alert("✅ Trial request sent! We will add a key for you soon.");
+        await loadLicenseInfo(currentUser);
+      } catch (err) {
+        console.error("Trial request error:", err);
+        alert("❌ Trial request failed: " + err.message);
+      }
+    });
+  }
+
+  // Logout
+  const logoutBtn = document.getElementById("logout-btn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      alert("🔓 Logged out");
+      window.location.href = "index.html";
+    });
+  }
+</script>
+
 </body>
 </html>
