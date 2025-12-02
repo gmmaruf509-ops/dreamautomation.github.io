@@ -3,10 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dream Automation</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <title>SceneFlow Studio - আপনার অটোমেশন সফটওয়্যার</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -16,7 +22,12 @@
       line-height: 1.6;
     }
     a { color: inherit; text-decoration: none; }
-    .container { width: 90%; max-width: 1200px; margin: 0 auto; }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
 
     /* Navbar */
     header {
@@ -132,11 +143,8 @@
       font-size: 0.8rem;
       color: rgba(255,255,255,0.75);
     }
-    .hero-meta strong {
-      color: #fff;
-    }
+    .hero-meta strong { color: #fff; }
 
-    /* Hero right (mockup) */
     .hero-card {
       background: radial-gradient(circle at top,#1b1c4a,#07051e);
       border-radius: 28px;
@@ -152,10 +160,7 @@
       font-size: 0.8rem;
       color: rgba(255,255,255,0.7);
     }
-    .dots {
-      display: flex;
-      gap: 6px;
-    }
+    .dots { display: flex; gap: 6px; }
     .dot {
       width: 8px;
       height: 8px;
@@ -169,10 +174,7 @@
       border: 1px solid rgba(255,255,255,0.06);
       min-height: 220px;
     }
-    .hero-screen h3 {
-      font-size: 0.9rem;
-      margin-bottom: 10px;
-    }
+    .hero-screen h3 { font-size: 0.9rem; margin-bottom: 10px; }
     .list-header,
     .list-row {
       display: grid;
@@ -201,10 +203,8 @@
       color: #76ffb5;
     }
 
-    /* Features */
-    section {
-      padding: 40px 0;
-    }
+    /* Sections */
+    section { padding: 40px 0; }
     .section-title {
       text-align: center;
       margin-bottom: 32px;
@@ -217,6 +217,8 @@
       font-size: 0.9rem;
       color: rgba(255,255,255,0.7);
     }
+
+    /* Features */
     .features-grid {
       display: grid;
       grid-template-columns: repeat(4,minmax(0,1fr));
@@ -235,7 +237,7 @@
       font-size: 0.9rem;
     }
 
-    /* Pricing */
+    /* Pricing (simple, custom) */
     .pricing-grid {
       display: grid;
       grid-template-columns: repeat(3,minmax(0,1fr));
@@ -251,7 +253,7 @@
       gap: 12px;
       font-size: 0.9rem;
     }
-    .price-card.highlight {
+    .price-card.popular {
       border-color: #4eff9a;
       box-shadow: 0 18px 50px rgba(0,0,0,0.8);
     }
@@ -265,31 +267,118 @@
       font-weight: 400;
       color: rgba(255,255,255,0.7);
     }
+    .price-old {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.6);
+      text-decoration: line-through;
+    }
     .price-features {
       list-style: none;
       padding-left: 0;
       font-size: 0.85rem;
     }
-    .price-features li {
-      margin-bottom: 4px;
-    }
+    .price-features li { margin-bottom: 4px; }
 
-    /* FAQ */
-    .faq {
-      max-width: 800px;
-      margin: 0 auto;
+    /* Auth (Sign up / Login) Section */
+    .auth-section { padding: 50px 0; }
+    .auth-layout {
+      display: grid;
+      grid-template-columns: minmax(0,1.1fr) minmax(0,1fr);
+      gap: 26px;
+      align-items: center;
     }
-    .faq-item {
-      background: rgba(0,0,0,0.4);
-      border-radius: 16px;
-      padding: 14px 16px;
-      border: 1px solid rgba(255,255,255,0.06);
-      margin-bottom: 10px;
+    .auth-text h2 {
+      font-size: 1.7rem;
+      margin-bottom: 8px;
+    }
+    .auth-text p {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.75);
+      margin-bottom: 12px;
+    }
+    .auth-steps {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 10px;
+    }
+    .auth-steps li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
       font-size: 0.9rem;
     }
-    .faq-item h3 {
-      font-size: 0.95rem;
-      margin-bottom: 4px;
+    .auth-step-badge {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+    }
+    .auth-card {
+      background: rgba(0,0,0,0.55);
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 18px 18px 20px;
+      box-shadow: 0 22px 60px rgba(0,0,0,0.9);
+    }
+    .auth-tabs {
+      display: inline-flex;
+      padding: 4px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      margin-bottom: 16px;
+    }
+    .auth-tab {
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: rgba(255,255,255,0.7);
+    }
+    .auth-tab.active {
+      background: #020014;
+      color: #fff;
+    }
+    .auth-form {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 0.9rem;
+    }
+    .auth-form.active { display: flex; }
+    .auth-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .auth-group label {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.8);
+    }
+    .auth-card input {
+      background: rgba(0,0,0,0.7);
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 8px 10px;
+      color: #fff;
+      outline: none;
+      font-family: inherit;
+      font-size: 0.9rem;
+    }
+    .auth-card input:focus {
+      border-color: #4eff9a;
+      box-shadow: 0 0 0 1px rgba(78,255,154,0.45);
+    }
+    .auth-note {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.7);
     }
 
     /* Footer */
@@ -317,9 +406,7 @@
         grid-template-columns: 1fr;
         padding-top: 50px;
       }
-      .hero-card {
-        order: -1;
-      }
+      .hero-card { order: -1; }
       .features-grid {
         grid-template-columns: repeat(2,minmax(0,1fr));
       }
@@ -327,15 +414,14 @@
         grid-template-columns: repeat(2,minmax(0,1fr));
       }
       .nav-links { display: none; }
+      .auth-layout { grid-template-columns: 1fr; }
     }
     @media (max-width: 640px) {
       .features-grid,
       .pricing-grid {
         grid-template-columns: 1fr;
       }
-      .hero {
-        padding-top: 40px;
-      }
+      .hero { padding-top: 40px; }
     }
   </style>
 </head>
@@ -345,16 +431,16 @@
     <div class="container nav">
       <div class="logo">
         <div class="logo-badge"></div>
-        Dream Automation
+        SceneFlow Studio
       </div>
       <nav class="nav-links">
         <a href="#features">Features</a>
         <a href="#pricing">Pricing</a>
-        <a href="#faq">FAQ</a>
+        <a href="#auth">Sign Up / Login</a>
       </nav>
       <div class="nav-actions">
-        <button class="btn btn-outline">Log in</button>
-        <button class="btn btn-primary">Try it Free</button>
+        <a href="#auth" class="btn btn-outline">Login</a>
+        <a href="#auth" class="btn btn-primary">Sign Up</a>
       </div>
     </div>
   </header>
@@ -364,19 +450,19 @@
     <section class="hero">
       <div>
         <div class="hero-tag">
-          🚀 #১ সফটওয়্যার সল্যুশন
+          ⚡ অটোমেশন ভিডিও / কনটেন্ট টুল
         </div>
         <h1 class="hero-title">
-          এক ক্লিকে তৈরি করুন<br />
-          <span class="highlight">প্রফেশনাল সফটওয়্যার সল্যুশন</span>
+          এক ক্লিকে অটোমেট করুন<br />
+          <span class="highlight">SceneFlow Studio দিয়ে আপনার ওয়ার্কফ্লো</span>
         </h1>
         <p class="hero-subtitle">
-          আপনার ব্যবসার জন্য ফাস্ট, সিকিউর এবং স্কেলেবল সফটওয়্যার।
-          কোড না জেনেও সহজে ব্যবহার করতে পারবেন – শুধু ইনস্টল করুন এবং কাজ শুরু করুন।
+          ম্যানুয়াল কাজ বাদ দিয়ে এক জায়গায় স্ক্রিপ্ট, ক্লিপ, শিডিউল আর পাবলিশ –
+          সবকিছু অটোমেট করতে SceneFlow Studio ব্যবহার করুন।
         </p>
         <div class="hero-actions">
-          <button class="btn btn-primary">⬇ ফ্রি ডাউনলোড</button>
-          <button class="btn btn-outline">💳 এখনই কিনুন</button>
+          <a href="#auth" class="btn btn-primary">🚀 ফ্রি অ্যাকাউন্ট খুলুন</a>
+          <a href="#pricing" class="btn btn-outline">💳 প্রাইসিং দেখুন</a>
         </div>
         <div class="hero-meta">
           <span><strong>১০,০০০+</strong> ইউজার</span>
@@ -390,29 +476,29 @@
           <div class="dots">
             <div class="dot"></div><div class="dot"></div><div class="dot"></div>
           </div>
-          <span>ড্যাশবোর্ড প্রিভিউ</span>
+          <span>Live Automation Queue</span>
         </div>
         <div class="hero-screen">
-          <h3>Bulk Project Manager</h3>
+          <h3>Bulk Scene Generator</h3>
           <div class="list-header">
             <span>Project</span>
             <span>Status</span>
             <span>Output</span>
           </div>
           <div class="list-row">
-            <span>Marketing Automation</span>
+            <span>YouTube Shorts Pack</span>
             <span><span class="badge">Running</span></span>
-            <span>32 campaigns</span>
+            <span>24 clips</span>
           </div>
           <div class="list-row">
-            <span>Sales Report Generator</span>
+            <span>Client Promo Reels</span>
             <span>Completed</span>
-            <span>12 PDFs</span>
+            <span>12 renders</span>
           </div>
           <div class="list-row">
-            <span>Client Onboarding Flow</span>
+            <span>TikTok Automation</span>
             <span>Queued</span>
-            <span>5 tasks</span>
+            <span>15 posts</span>
           </div>
         </div>
       </div>
@@ -422,25 +508,25 @@
   <!-- Features -->
   <section id="features" class="container">
     <div class="section-title">
-      <h2>কেন ব্যবহার করবেন?</h2>
-      <p>একটি সফটওয়্যারে সব প্রয়োজনীয় টুল, সময় ও খরচ দুটোই বাঁচান।</p>
+      <h2>কেন SceneFlow Studio?</h2>
+      <p>একটি সফটওয়্যারে অটো স্ক্রিপ্ট, ভিডিও জেনারেশন, শিডিউলিং – সব একসাথে।</p>
     </div>
     <div class="features-grid">
       <div class="feature-card">
-        <div class="feature-title">⚡ সুপার ফাস্ট পারফরম্যান্স</div>
-        <p>অপ্টিমাইজড কোড ও ক্যাশিং-এর কারণে খুব দ্রুত কাজ করে।</p>
+        <div class="feature-title">⚡ Bulk Automation</div>
+        <p>এক ক্লিকে অনেকগুলো ভিডিও / পোস্ট কিউতে যোগ করে অটো প্রসেস করুন।</p>
       </div>
       <div class="feature-card">
-        <div class="feature-title">🔒 এন্টারপ্রাইজ সিকিউরিটি</div>
-        <p>ডাটা এনক্রিপশন ও রোল-বেসড এক্সেস কন্ট্রোল সুবিধা।</p>
+        <div class="feature-title">🤖 AI Scene Builder</div>
+        <p>AI দিয়ে অটো স্ক্রিপ্ট ও scene breakdown তৈরি করুন।</p>
       </div>
       <div class="feature-card">
-        <div class="feature-title">🤖 অটোমেশন</div>
-        <p>রিপোর্ট, ইমেইল, নোটিফিকেশন – সবই অটো জেনারেট হয়।</p>
+        <div class="feature-title">🎯 Multi-platform Ready</div>
+        <p>YouTube, TikTok, Reels – আলাদা আলাদা সাইজ ও ফরম্যাট অটো সেট।</p>
       </div>
       <div class="feature-card">
-        <div class="feature-title">🌐 মাল্টি-ল্যাঙ্গুয়েজ</div>
-        <p>বাংলা, ইংরেজি সহ একাধিক ভাষা সাপোর্ট।</p>
+        <div class="feature-title">📊 Client Dashboard</div>
+        <p>এজেন্সি ইউজারদের জন্য আলাদা ক্লায়েন্ট ড্যাশবোর্ড ও রিপোর্ট।</p>
       </div>
     </div>
   </section>
@@ -449,59 +535,141 @@
   <section id="pricing" class="container">
     <div class="section-title">
       <h2>প্রাইসিং প্ল্যান</h2>
-      <p>আজই লাইফটাইম ডিল নিন, একবার পেমেন্ট – আজীবন ব্যবহার।</p>
+      <p>শুরু করার জন্য ফ্রি প্ল্যান, আর স্কেল করার জন্য প্রো ও লাইফটাইম ডিল।</p>
     </div>
     <div class="pricing-grid">
       <div class="price-card">
-        <div class="price-name">স্টার্টার</div>
-        <div class="price-value">$29 <span>/ one-time</span></div>
+        <div class="price-name">Free Trial</div>
+        <div class="price-value">$0 <span>/ ১ দিন</span></div>
         <ul class="price-features">
-          <li>১টি লাইসেন্স</li>
-          <li>বেসিক ফিচার</li>
-          <li>ইমেইল সাপোর্ট</li>
+          <li>১ দিন ফুল ফিচার ব্যবহার</li>
+          <li>সীমিত প্রোজেক্ট / ক্লিপ</li>
+          <li>বেসিক সাপোর্ট</li>
         </ul>
-        <button class="btn btn-outline">প্ল্যান নিন</button>
+        <a href="#auth" class="btn btn-outline" style="width:100%;justify-content:center;">
+          Start Free Trial
+        </a>
       </div>
-      <div class="price-card highlight">
-        <div class="price-name">প্রো (Most Popular)</div>
-        <div class="price-value">$69 <span>/ one-time</span></div>
+
+      <div class="price-card popular">
+        <div class="price-name">Monthly Pro</div>
+        <div class="price-value">$39 <span>/ প্রতি মাস</span></div>
         <ul class="price-features">
-          <li>৫টি লাইসেন্স</li>
-          <li>সব প্রো ফিচার আনলক</li>
-          <li>প্রায়োরিটি সাপোর্ট</li>
+          <li>আনলিমিটেড প্রোজেক্ট</li>
+          <li>সব AI টুল আনলক</li>
+          <li>4K Export, মাল্টি-প্ল্যাটফর্ম</li>
+          <li>প্রায়োরিটি সাপোর্ট</li>
         </ul>
-        <button class="btn btn-primary">এই প্ল্যান নিন</button>
+        <a href="#auth" class="btn btn-primary" style="width:100%;justify-content:center;">
+          Start Monthly Plan
+        </a>
       </div>
+
       <div class="price-card">
-        <div class="price-name">এজেন্সি</div>
-        <div class="price-value">$149 <span>/ one-time</span></div>
+        <div class="price-name">Lifetime Access</div>
+        <div class="price-old">$897</div>
+        <div class="price-value">$499 <span>/ একবার পেমেন্ট</span></div>
         <ul class="price-features">
-          <li>২০টি লাইসেন্স</li>
-          <li>হোয়াইট লেবেল অপশন</li>
-          <li>ডেডিকেটেড সাপোর্ট</li>
+          <li>Lifetime updates</li>
+          <li>কমার্শিয়াল লাইসেন্স</li>
+          <li>VIP সাপোর্ট</li>
         </ul>
-        <button class="btn btn-outline">এজেন্সি ডিল</button>
+        <a href="#auth" class="btn btn-outline" style="width:100%;justify-content:center;">
+          Get Lifetime Deal
+        </a>
       </div>
     </div>
   </section>
 
-  <!-- FAQ -->
-  <section id="faq" class="container">
-    <div class="section-title">
-      <h2>প্রশ্ন ও উত্তর</h2>
-    </div>
-    <div class="faq">
-      <div class="faq-item">
-        <h3>লাইফটাইম ডিল মানে কী?</h3>
-        <p>একবার পেমেন্ট করলেই এই ভার্সন এবং ভবিষ্যতের আপডেট লাইফটাইম ব্যবহার করতে পারবেন।</p>
+  <!-- Sign Up / Login Section -->
+  <section id="auth" class="container auth-section">
+    <div class="auth-layout">
+      <!-- Left text -->
+      <div class="auth-text">
+        <h2>অ্যাকাউন্ট খুলে SceneFlow Studio ব্যবহার করুন</h2>
+        <p>
+          ফ্রি সাইন আপ করুন, তারপর লগ ইন করে আপনার অটোমেশন ড্যাশবোর্ডে প্রবেশ করুন।
+          ইমেইল + পাসওয়ার্ড দিয়েই এখন সবকিছু ম্যানেজ করুন।
+        </p>
+        <ul class="auth-steps">
+          <li>
+            <span class="auth-step-badge">1</span>
+            <span>Sign Up ফর্ম পূরণ করুন</span>
+          </li>
+          <li>
+            <span class="auth-step-badge">2</span>
+            <span>ইমেইল ভেরিফাই করে Login করুন</span>
+          </li>
+          <li>
+            <span class="auth-step-badge">3</span>
+            <span>ড্যাশবোর্ডে গিয়ে প্রোজেক্ট তৈরি করুন</span>
+          </li>
+        </ul>
       </div>
-      <div class="faq-item">
-        <h3>রিফান্ড পলিসি আছে?</h3>
-        <p>হ্যাঁ, ১৪ দিনের মধ্যে সন্তুষ্ট না হলে no-questions-asked রিফান্ড।</p>
-      </div>
-      <div class="faq-item">
-        <h3>উইন্ডোজ/ম্যাক দুটাতেই কাজ করবে?</h3>
-        <p>হ্যাঁ, আমাদের সফটওয়্যার Windows 10/11 এবং macOS-এর জন্য আলাদা বিল্ড দেয়া হয়।</p>
+
+      <!-- Right card -->
+      <div class="auth-card">
+        <div class="auth-tabs">
+          <button class="auth-tab active" data-target="signup-form">Sign Up</button>
+          <button class="auth-tab" data-target="login-form">Login</button>
+        </div>
+
+        <!-- SIGN UP FORM -->
+        <form id="signup-form" class="auth-form active">
+          <div class="auth-group">
+            <label for="su-name">পূর্ণ নাম*</label>
+            <input id="su-name" name="name" required placeholder="আপনার নাম" />
+          </div>
+
+          <div class="auth-group">
+            <label for="su-email">ইমেইল অ্যাড্রেস*</label>
+            <input
+              id="su-email"
+              type="email"
+              name="email"
+              required
+              placeholder="example@gmail.com"
+            />
+          </div>
+
+          <div class="auth-group">
+            <label for="su-password">পাসওয়ার্ড*</label>
+            <input
+              id="su-password"
+              type="password"
+              name="password"
+              required
+              placeholder="কমপক্ষে ৬ অক্ষর"
+            />
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">
+            🚀 Sign Up
+          </button>
+
+          <p class="auth-note">
+            Sign Up করলে আপনার ইমেইল Firebase Authentication-এ সেভ হবে।
+            একই ইমেইল দিয়ে পরে লগ ইন করতে পারবেন।
+          </p>
+        </form>
+
+        <!-- LOGIN FORM -->
+        <form id="login-form" class="auth-form">
+          <div class="auth-group">
+            <label for="li-email">ইমেইল</label>
+            <input id="li-email" type="email" placeholder="আপনার ইমেইল" />
+          </div>
+          <div class="auth-group">
+            <label for="li-password">পাসওয়ার্ড</label>
+            <input id="li-password" type="password" placeholder="আপনার পাসওয়ার্ড" />
+          </div>
+
+          <button type="submit" class="btn btn-outline" style="width:100%;justify-content:center;">
+            Login
+          </button>
+
+          <p class="auth-note" id="login-status"></p>
+        </form>
       </div>
     </div>
   </section>
@@ -509,21 +677,119 @@
   <!-- Footer -->
   <footer>
     <div class="container row">
-      <span>© <span id="year"></span> তোমার কোম্পানি নাম</span>
+      <span>© <span id="year"></span> SceneFlow Studio</span>
       <div class="links">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms</a>
-        <a href="#">Contact</a>
+        <a href="#auth">Sign Up</a>
+        <a href="#pricing">Pricing</a>
       </div>
     </div>
   </footer>
 
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
+  <!-- Year + Tabs + Firebase Auth -->
+  <script type="module">
+    // Year
+    const yearSpan = document.getElementById("year");
+    if (yearSpan) {
+      yearSpan.textContent = new Date().getFullYear();
+    }
+
+    // Auth tabs toggle
+    const tabs = document.querySelectorAll(".auth-tab");
+    const forms = document.querySelectorAll(".auth-form");
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        tabs.forEach((t) => t.classList.remove("active"));
+        forms.forEach((f) => f.classList.remove("active"));
+
+        tab.classList.add("active");
+        const targetId = tab.getAttribute("data-target");
+        document.getElementById(targetId).classList.add("active");
+      });
+    });
+
+    // ---------- Firebase Setup ----------
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import {
+      getAnalytics
+    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      signOut,
+      onAuthStateChanged,
+      updateProfile
+    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA_lZmfn4T31B6jm1dB0UywR7OEgYIPlo0",
+      authDomain: "sceneflow-studio.firebaseapp.com",
+      projectId: "sceneflow-studio",
+      storageBucket: "sceneflow-studio.firebasestorage.app",
+      messagingSenderId: "961327164320",
+      appId: "1:961327164320:web:7ffb160db2529f4c1412c5",
+      measurementId: "G-56962H6FQ4"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    getAnalytics(app);
+    const auth = getAuth(app);
+
+    // SIGN UP handler
+    const signupForm = document.getElementById("signup-form");
+    if (signupForm) {
+      signupForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const name = (document.getElementById("su-name") as HTMLInputElement).value;
+        const email = (document.getElementById("su-email") as HTMLInputElement).value;
+        const password = (document.getElementById("su-password") as HTMLInputElement).value;
+
+        try {
+          const cred = await createUserWithEmailAndPassword(auth, email, password);
+          if (name) {
+            await updateProfile(cred.user, { displayName: name });
+          }
+          alert("✅ Sign up সফল! এখন Login ট্যাবে গিয়ে লগ ইন করুন।");
+          signupForm.reset();
+        } catch (err) {
+          alert("❌ Sign up error: " + err.message);
+        }
+      });
+    }
+
+    // LOGIN handler
+    const loginForm = document.getElementById("login-form");
+    const loginStatus = document.getElementById("login-status");
+    if (loginForm) {
+      loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = (document.getElementById("li-email") as HTMLInputElement).value;
+        const password = (document.getElementById("li-password") as HTMLInputElement).value;
+
+        try {
+          await signInWithEmailAndPassword(auth, email, password);
+          if (loginStatus) loginStatus.textContent = "🎉 Login সফল!";
+        } catch (err) {
+          if (loginStatus) loginStatus.textContent = "❌ Login error: " + err.message;
+        }
+      });
+    }
+
+    // Listen auth state
+    onAuthStateChanged(auth, (user) => {
+      console.log("Current user:", user);
+    });
+
+    // Optional logout button (যদি পরে যোগ করো)
+    const logoutBtn = document.getElementById("logout-btn");
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", async () => {
+        await signOut(auth);
+        alert("🔓 Logged out");
+      });
+    }
   </script>
 </body>
 </html>
-<!-- trigger github pages -->
-
-
-
