@@ -45,6 +45,10 @@
       font-weight: 600;
       box-shadow: 0 10px 30px rgba(0,0,0,0.4);
     }
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
 
     /* Sidebar */
     .sidebar {
@@ -242,6 +246,12 @@
       margin-bottom: 4px;
     }
 
+    .small-text {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.78);
+      margin-top: 4px;
+    }
+
     @media (max-width: 900px) {
       body { flex-direction: column; }
       .sidebar {
@@ -345,19 +355,55 @@
               >
                 💳 Buy Lifetime Access
               </a>
-              <small>TODO: এখানে তোমার payment / checkout link বসাও (Gumroad, Stripe ইত্যাদি)।</small>
+              <small>TODO: এখানে payment / checkout link বসাও (Gumroad, Stripe ইত্যাদি)।</small>
             </div>
           </div>
 
-          <!-- Account overview -->
+          <!-- Account overview + trial system -->
           <div class="card">
             <h3>Account Overview</h3>
             <p>Basic account information and current plan.</p>
             <ul style="font-size:0.9rem; padding-left:18px;">
               <li>Email: <span id="dash-email">user@example.com</span></li>
-              <li>Plan: <strong>Free / Trial</strong> (static text – চাইলে হাত দিয়ে বদলাতে পারো)</li>
-              <li>Status: <strong>Active</strong></li>
+              <li>
+                Plan:
+                <span id="plan-name"><strong>Free / Trial (not requested)</strong></span>
+              </li>
+              <li>
+                Status:
+                <span id="plan-status"><strong>Free</strong></span>
+              </li>
+              <li id="plan-expiry-row" style="display:none;">
+                Trial ends: <span id="plan-expiry"></span>
+              </li>
             </ul>
+
+            <hr style="margin:10px 0; border-color:rgba(255,255,255,0.15);" />
+
+            <div>
+              <button class="btn btn-outline" id="request-trial-btn">
+                Request 3-Day Free Trial
+              </button>
+              <p class="small-text" id="trial-message">
+                You can request a 3-day free trial. We’ll review and send you a trial key by email.
+              </p>
+            </div>
+
+            <div style="margin-top:12px;">
+              <label style="font-size:0.8rem;">Have a trial / license key?</label>
+              <div style="display:flex; gap:8px; margin-top:4px; flex-wrap:wrap;">
+                <input
+                  id="license-key-input"
+                  placeholder="Enter trial key"
+                  style="flex:1 1 160px; min-width:0; padding:7px 9px; border-radius:10px;
+                         border:1px solid rgba(255,255,255,0.2); background:rgba(0,0,0,0.7); color:#fff;"
+                />
+                <button class="btn btn-primary" id="activate-key-btn">
+                  Activate Key
+                </button>
+              </div>
+              <p class="small-text" id="license-status"></p>
+            </div>
           </div>
         </div>
 
@@ -387,7 +433,7 @@
     </main>
   </div>
 
-  <!-- Firebase + Auth check -->
+  <!-- Firebase + Auth + Firestore -->
   <script type="module">
     // Year
     document.getElementById("year").textContent = new Date().getFullYear();
@@ -399,6 +445,14 @@
       onAuthStateChanged,
       signOut
     } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      setDoc,
+      serverTimestamp,
+      Timestamp
+    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyA_lZmfn4T31B6jm1dB0UywR7OEgYIPlo0",
@@ -413,23 +467,172 @@
     const app = initializeApp(firebaseConfig);
     getAnalytics(app);
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
     const navUsername = document.getElementById("nav-username");
     const dashUsername = document.getElementById("dash-username");
     const dashEmail = document.getElementById("dash-email");
 
+    const planNameEl = document.getElementById("plan-name");
+    const planStatusEl = document.getElementById("plan-status");
+    const planExpiryRow = document.getElementById("plan-expiry-row");
+    const planExpiryEl = document.getElementById("plan-expiry");
+
+    const requestTrialBtn = document.getElementById("request-trial-btn");
+    const trialMessage = document.getElementById("trial-message");
+    const licenseKeyInput = document.getElementById("license-key-input");
+    const activateKeyBtn = document.getElementById("activate-key-btn");
+    const licenseStatus = document.getElementById("license-status");
+
+    let currentUser = null;
+
+    function setText(el, text) {
+      if (!el) return;
+      el.textContent = text;
+    }
+
+    async function loadLicenseInfo(user) {
+      const licRef = doc(db, "licenses", user.uid);
+      const snap = await getDoc(licRef);
+
+      planExpiryRow.style.display = "none";
+
+      if (!snap.exists()) {
+        setText(planNameEl, "Free / Trial (not requested)");
+        setText(planStatusEl, "Free");
+        trialMessage.textContent = "You have not requested a trial yet.";
+        requestTrialBtn.disabled = false;
+        requestTrialBtn.textContent = "Request 3-Day Free Trial";
+        return;
+      }
+
+      const data = snap.data();
+      const status = data.status || "free";
+      const planType = data.planType || "free";
+      const expiresAt = data.expiresAt ? data.expiresAt.toDate() : null;
+
+      if (status === "pending") {
+        setText(planNameEl, "Trial (pending)");
+        setText(planStatusEl, "Pending");
+        trialMessage.textContent = "Your 3-day trial request is pending. We will send a key to your email.";
+        requestTrialBtn.disabled = true;
+        requestTrialBtn.textContent = "Trial requested";
+      } else if (status === "active") {
+        if (planType === "trial" && expiresAt) {
+          const now = new Date();
+          const diffMs = expiresAt.getTime() - now.getTime();
+          const daysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+          if (diffMs > 0) {
+            setText(planNameEl, `Trial – ${daysLeft} day(s) left`);
+            setText(planStatusEl, "Active");
+            planExpiryRow.style.display = "list-item";
+            planExpiryEl.textContent = expiresAt.toLocaleString();
+            trialMessage.textContent = "Your 3-day trial is active.";
+          } else {
+            setText(planNameEl, "Trial – expired");
+            setText(planStatusEl, "Expired");
+            trialMessage.textContent = "Your trial has expired. You can buy full access anytime.";
+          }
+        } else {
+          setText(planNameEl, "Paid plan");
+          setText(planStatusEl, "Active");
+          trialMessage.textContent = "You have an active paid plan.";
+        }
+        requestTrialBtn.disabled = true;
+        requestTrialBtn.textContent = "Trial active";
+      } else {
+        setText(planNameEl, "Free / Trial");
+        setText(planStatusEl, "Free");
+        trialMessage.textContent = "You can request a 3-day free trial.";
+        requestTrialBtn.disabled = false;
+        requestTrialBtn.textContent = "Request 3-Day Free Trial";
+      }
+    }
+
     // user logged in না থাকলে index.html এ ফেরত পাঠাই
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (!user) {
         window.location.href = "index.html#auth";
         return;
       }
+      currentUser = user;
       const name = user.displayName || user.email;
       if (navUsername) navUsername.textContent = "Welcome, " + name;
       if (dashUsername) dashUsername.textContent = name;
       if (dashEmail) dashEmail.textContent = user.email || "";
+
+      await loadLicenseInfo(user);
     });
 
+    // trial request
+    if (requestTrialBtn) {
+      requestTrialBtn.addEventListener("click", async () => {
+        if (!currentUser) return;
+        const licRef = doc(db, "licenses", currentUser.uid);
+        await setDoc(
+          licRef,
+          {
+            email: currentUser.email,
+            planType: "trial",
+            status: "pending",
+            requestedAt: serverTimestamp()
+          },
+          { merge: true }
+        );
+        trialMessage.textContent = "Trial request sent. We will email your key soon.";
+        requestTrialBtn.disabled = true;
+        requestTrialBtn.textContent = "Trial requested";
+      });
+    }
+
+    // key activation
+    if (activateKeyBtn) {
+      activateKeyBtn.addEventListener("click", async () => {
+        licenseStatus.textContent = "";
+        const key = licenseKeyInput.value.trim();
+        if (!key) {
+          licenseStatus.textContent = "Please enter a key.";
+          return;
+        }
+        if (!currentUser) return;
+
+        const licRef = doc(db, "licenses", currentUser.uid);
+        const snap = await getDoc(licRef);
+        if (!snap.exists()) {
+          licenseStatus.textContent = "No trial request found for this account.";
+          return;
+        }
+        const data = snap.data();
+        if (!data.key) {
+          licenseStatus.textContent = "Key not set yet. Please wait until we approve your trial.";
+          return;
+        }
+        if (data.key !== key) {
+          licenseStatus.textContent = "Invalid key.";
+          return;
+        }
+
+        // correct key → activate 3-day trial
+        const now = new Date();
+        const expiresAt = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
+
+        await setDoc(
+          licRef,
+          {
+            status: "active",
+            planType: "trial",
+            activatedAt: serverTimestamp(),
+            expiresAt: Timestamp.fromDate(expiresAt)
+          },
+          { merge: true }
+        );
+
+        licenseStatus.textContent = "✅ Trial activated!";
+        await loadLicenseInfo(currentUser);
+      });
+    }
+
+    // Logout
     const logoutBtn = document.getElementById("logout-btn");
     if (logoutBtn) {
       logoutBtn.addEventListener("click", async () => {
