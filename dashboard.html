@@ -373,9 +373,6 @@
                 Status:
                 <span id="plan-status"><strong>Free</strong></span>
               </li>
-              <li id="plan-expiry-row" style="display:none;">
-                Trial ends: <span id="plan-expiry"></span>
-              </li>
             </ul>
 
             <hr style="margin:10px 0; border-color:rgba(255,255,255,0.15);" />
@@ -387,22 +384,6 @@
               <p class="small-text" id="trial-message">
                 You can request a 3-day free trial. We’ll review and send you a trial key by email.
               </p>
-            </div>
-
-            <div style="margin-top:12px;">
-              <label style="font-size:0.8rem;">Have a trial / license key?</label>
-              <div style="display:flex; gap:8px; margin-top:4px; flex-wrap:wrap;">
-                <input
-                  id="license-key-input"
-                  placeholder="Enter trial key"
-                  style="flex:1 1 160px; min-width:0; padding:7px 9px; border-radius:10px;
-                         border:1px solid rgba(255,255,255,0.2); background:rgba(0,0,0,0.7); color:#fff;"
-                />
-                <button class="btn btn-primary" id="activate-key-btn">
-                  Activate Key
-                </button>
-              </div>
-              <p class="small-text" id="license-status"></p>
             </div>
           </div>
         </div>
@@ -450,8 +431,7 @@
       doc,
       getDoc,
       setDoc,
-      serverTimestamp,
-      Timestamp
+      serverTimestamp
     } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -475,14 +455,8 @@
 
     const planNameEl = document.getElementById("plan-name");
     const planStatusEl = document.getElementById("plan-status");
-    const planExpiryRow = document.getElementById("plan-expiry-row");
-    const planExpiryEl = document.getElementById("plan-expiry");
-
     const requestTrialBtn = document.getElementById("request-trial-btn");
     const trialMessage = document.getElementById("trial-message");
-    const licenseKeyInput = document.getElementById("license-key-input");
-    const activateKeyBtn = document.getElementById("activate-key-btn");
-    const licenseStatus = document.getElementById("license-status");
 
     let currentUser = null;
 
@@ -492,60 +466,49 @@
     }
 
     async function loadLicenseInfo(user) {
-      const licRef = doc(db, "licenses", user.uid);
-      const snap = await getDoc(licRef);
+      try {
+        const licRef = doc(db, "licenses", user.uid);
+        const snap = await getDoc(licRef);
 
-      planExpiryRow.style.display = "none";
-
-      if (!snap.exists()) {
-        setText(planNameEl, "Free / Trial (not requested)");
-        setText(planStatusEl, "Free");
-        trialMessage.textContent = "You have not requested a trial yet.";
-        requestTrialBtn.disabled = false;
-        requestTrialBtn.textContent = "Request 3-Day Free Trial";
-        return;
-      }
-
-      const data = snap.data();
-      const status = data.status || "free";
-      const planType = data.planType || "free";
-      const expiresAt = data.expiresAt ? data.expiresAt.toDate() : null;
-
-      if (status === "pending") {
-        setText(planNameEl, "Trial (pending)");
-        setText(planStatusEl, "Pending");
-        trialMessage.textContent = "Your 3-day trial request is pending. We will send a key to your email.";
-        requestTrialBtn.disabled = true;
-        requestTrialBtn.textContent = "Trial requested";
-      } else if (status === "active") {
-        if (planType === "trial" && expiresAt) {
-          const now = new Date();
-          const diffMs = expiresAt.getTime() - now.getTime();
-          const daysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-          if (diffMs > 0) {
-            setText(planNameEl, `Trial – ${daysLeft} day(s) left`);
-            setText(planStatusEl, "Active");
-            planExpiryRow.style.display = "list-item";
-            planExpiryEl.textContent = expiresAt.toLocaleString();
-            trialMessage.textContent = "Your 3-day trial is active.";
-          } else {
-            setText(planNameEl, "Trial – expired");
-            setText(planStatusEl, "Expired");
-            trialMessage.textContent = "Your trial has expired. You can buy full access anytime.";
-          }
-        } else {
-          setText(planNameEl, "Paid plan");
-          setText(planStatusEl, "Active");
-          trialMessage.textContent = "You have an active paid plan.";
+        if (!snap.exists()) {
+          setText(planNameEl, "Free / Trial (not requested)");
+          setText(planStatusEl, "Free");
+          trialMessage.textContent = "You have not requested a trial yet.";
+          requestTrialBtn.disabled = false;
+          requestTrialBtn.textContent = "Request 3-Day Free Trial";
+          return;
         }
-        requestTrialBtn.disabled = true;
-        requestTrialBtn.textContent = "Trial active";
-      } else {
-        setText(planNameEl, "Free / Trial");
-        setText(planStatusEl, "Free");
-        trialMessage.textContent = "You can request a 3-day free trial.";
-        requestTrialBtn.disabled = false;
-        requestTrialBtn.textContent = "Request 3-Day Free Trial";
+
+        const data = snap.data();
+        const status = data.status || "free";
+        const planType = data.planType || "free";
+
+        if (status === "pending") {
+          setText(planNameEl, "Trial (pending)");
+          setText(planStatusEl, "Pending");
+          trialMessage.textContent = "Your 3-day trial request is pending. We will send you a key by email.";
+          requestTrialBtn.disabled = true;
+          requestTrialBtn.textContent = "Trial requested";
+        } else if (status === "active") {
+          if (planType === "trial") {
+            setText(planNameEl, "Trial (active)");
+          } else {
+            setText(planNameEl, "Paid plan (active)");
+          }
+          setText(planStatusEl, "Active");
+          trialMessage.textContent = "Your plan is active.";
+          requestTrialBtn.disabled = true;
+          requestTrialBtn.textContent = "Trial active";
+        } else {
+          setText(planNameEl, "Free / Trial");
+          setText(planStatusEl, "Free");
+          trialMessage.textContent = "You can request a 3-day free trial.";
+          requestTrialBtn.disabled = false;
+          requestTrialBtn.textContent = "Request 3-Day Free Trial";
+        }
+      } catch (err) {
+        console.error("Load license error:", err);
+        trialMessage.textContent = "Could not load plan info (" + err.message + ")";
       }
     }
 
@@ -568,67 +531,25 @@
     if (requestTrialBtn) {
       requestTrialBtn.addEventListener("click", async () => {
         if (!currentUser) return;
-        const licRef = doc(db, "licenses", currentUser.uid);
-        await setDoc(
-          licRef,
-          {
-            email: currentUser.email,
-            planType: "trial",
-            status: "pending",
-            requestedAt: serverTimestamp()
-          },
-          { merge: true }
-        );
-        trialMessage.textContent = "Trial request sent. We will email your key soon.";
-        requestTrialBtn.disabled = true;
-        requestTrialBtn.textContent = "Trial requested";
-      });
-    }
 
-    // key activation
-    if (activateKeyBtn) {
-      activateKeyBtn.addEventListener("click", async () => {
-        licenseStatus.textContent = "";
-        const key = licenseKeyInput.value.trim();
-        if (!key) {
-          licenseStatus.textContent = "Please enter a key.";
-          return;
+        try {
+          const licRef = doc(db, "licenses", currentUser.uid);
+          await setDoc(
+            licRef,
+            {
+              email: currentUser.email,
+              planType: "trial",
+              status: "pending",
+              requestedAt: serverTimestamp()
+            },
+            { merge: true }
+          );
+          alert("✅ Trial request sent! Check Firestore → licenses collection.");
+          await loadLicenseInfo(currentUser);
+        } catch (err) {
+          console.error("Trial request error:", err);
+          alert("❌ Trial request failed: " + err.message);
         }
-        if (!currentUser) return;
-
-        const licRef = doc(db, "licenses", currentUser.uid);
-        const snap = await getDoc(licRef);
-        if (!snap.exists()) {
-          licenseStatus.textContent = "No trial request found for this account.";
-          return;
-        }
-        const data = snap.data();
-        if (!data.key) {
-          licenseStatus.textContent = "Key not set yet. Please wait until we approve your trial.";
-          return;
-        }
-        if (data.key !== key) {
-          licenseStatus.textContent = "Invalid key.";
-          return;
-        }
-
-        // correct key → activate 3-day trial
-        const now = new Date();
-        const expiresAt = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
-
-        await setDoc(
-          licRef,
-          {
-            status: "active",
-            planType: "trial",
-            activatedAt: serverTimestamp(),
-            expiresAt: Timestamp.fromDate(expiresAt)
-          },
-          { merge: true }
-        );
-
-        licenseStatus.textContent = "✅ Trial activated!";
-        await loadLicenseInfo(currentUser);
       });
     }
 
