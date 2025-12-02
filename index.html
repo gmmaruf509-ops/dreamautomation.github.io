@@ -787,24 +787,24 @@
     }
 
     // LOGIN handler
-    const loginForm = document.getElementById("login-form");
-    const loginStatus = document.getElementById("login-status");
-    if (loginForm) {
-      loginForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const email = document.getElementById("li-email").value;
-        const password = document.getElementById("li-password").value;
+const loginForm = document.getElementById("login-form");
+const loginStatus = document.getElementById("login-status");
+if (loginForm) {
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("li-email").value;
+    const password = document.getElementById("li-password").value;
 
-        try {
-          await signInWithEmailAndPassword(auth, email, password);
-          if (loginStatus) loginStatus.textContent = "🎉 Login successful!";
-          // চাইলে সরাসরি dashboard এও পাঠাতে পারো:
-          // window.location.href = "dashboard.html";
-        } catch (err) {
-          if (loginStatus) loginStatus.textContent = "❌ Login error: " + err.message;
-        }
-      });
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      // লগইন সফল হলে সরাসরি Dashboard পেজে নিয়ে যাবে
+      window.location.href = "dashboard.html";
+    } catch (err) {
+      if (loginStatus) loginStatus.textContent = "❌ Login error: " + err.message;
     }
+  });
+}
+
 
     // Auth state change – navbar টগল
     onAuthStateChanged(auth, (user) => {
@@ -831,3 +831,4 @@
   </script>
 </body>
 </html>
+
