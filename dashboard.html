@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dream Automation – Dashboard</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body{
+      font-family:"Poppins",sans-serif;
+      background: radial-gradient(circle at top left,#5827d8,#020014);
+      color:#fff;
+      line-height:1.6;
+    }
+    a{ color:inherit; text-decoration:none; }
+    .container{ width:90%; max-width:1200px; margin:0 auto; }
+    .btn{
+      padding:8px 18px;
+      border-radius:999px;
+      border:1px solid transparent;
+      font-size:0.9rem;
+      cursor:pointer;
+      transition:all 0.2s;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      background:transparent;
+      color:#fff;
+    }
+    .btn-outline{ border-color:rgba(255,255,255,0.35); }
+    .btn-primary{
+      background:linear-gradient(135deg,#32e6ff,#4eff9a);
+      color:#020014;
+      font-weight:600;
+      box-shadow:0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    header{
+      position:sticky;
+      top:0;
+      background:rgba(2,0,20,0.9);
+      backdrop-filter:blur(12px);
+      border-bottom:1px solid rgba(255,255,255,0.06);
+      z-index:40;
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:14px 0;
+    }
+    .logo{
+      font-weight:700;
+      font-size:1.3rem;
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+    .logo-badge{
+      width:26px;
+      height:26px;
+      border-radius:8px;
+      background:linear-gradient(135deg,#ff4b81,#ff9a62);
+    }
+    .nav-right{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    .user-pill{
+      padding:6px 14px;
+      border-radius:999px;
+      background:rgba(0,0,0,0.6);
+      border:1px solid rgba(255,255,255,0.25);
+      font-size:0.85rem;
+    }
+
+    main{ padding:40px 0 60px; }
+    .dash-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-bottom:24px;
+    }
+    .dash-title{
+      font-size:1.5rem;
+      font-weight:600;
+    }
+    .dash-sub{ font-size:0.9rem; color:rgba(255,255,255,0.75); }
+
+    .dash-grid{
+      display:grid;
+      grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);
+      gap:20px;
+    }
+    .card{
+      background:radial-gradient(circle at top,#1b1c4a,#050218);
+      border-radius:24px;
+      border:1px solid rgba(255,255,255,0.08);
+      padding:18px 18px 20px;
+      box-shadow:0 22px 60px rgba(0,0,0,0.9);
+    }
+    .card h3{ font-size:1.05rem; margin-bottom:8px; }
+    .card p{ font-size:0.9rem; color:rgba(255,255,255,0.85); margin-bottom:10px; }
+    .pill-row{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
+    .pill{
+      padding:4px 10px;
+      border-radius:999px;
+      background:rgba(0,0,0,0.6);
+      border:1px solid rgba(255,255,255,0.15);
+      font-size:0.8rem;
+    }
+    .download-links{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .download-links small{
+      font-size:0.75rem;
+      color:rgba(255,255,255,0.75);
+    }
+
+    @media(max-width:900px){
+      .dash-grid{ grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="logo">
+        <div class="logo-badge"></div>
+        Dream Automation
+      </div>
+      <div class="nav-right">
+        <div class="user-pill" id="nav-username">Welcome, user</div>
+        <a href="index.html" class="btn btn-outline">Back to site</a>
+        <button class="btn btn-primary" id="logout-btn">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section>
+      <div class="dash-header">
+        <div>
+          <div class="dash-title">Welcome, <span id="dash-username">User</span></div>
+          <div class="dash-sub">
+            You are logged in. Manage your license and downloads from here.
+          </div>
+        </div>
+      </div>
+
+      <div class="dash-grid">
+        <div class="card">
+          <h3>Your Product</h3>
+          <p>Dream Automation – All-in-one automation software for your business.</p>
+          <div class="pill-row">
+            <span class="pill">AI-powered</span>
+            <span class="pill">1-click workflows</span>
+            <span class="pill">Lifetime updates (for lifetime plan)</span>
+          </div>
+          <div class="download-links">
+            <a href="#"
+               class="btn btn-primary"
+               style="justify-content:center;">
+              ⬇ Download Software
+            </a>
+            <small>Replace this link with your real download URL (Google Drive / your server).</small>
+
+            <a href="#"
+               class="btn btn-outline"
+               style="justify-content:center;margin-top:4px;">
+              💳 Buy Lifetime Access
+            </a>
+            <small>Replace with your checkout link (Gumroad, LemonSqueezy, etc.).</small>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Account Overview</h3>
+          <p>Basic account info (email, plan, status).</p>
+          <ul style="font-size:0.9rem; padding-left:18px;">
+            <li>Email: <span id="dash-email">user@example.com</span></li>
+            <li>Plan: <strong>Free / Trial</strong> (static text)</li>
+            <li>Status: <strong>Active</strong></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA_lZmfn4T31B6jm1dB0UywR7OEgYIPlo0",
+      authDomain: "sceneflow-studio.firebaseapp.com",
+      projectId: "sceneflow-studio",
+      storageBucket: "sceneflow-studio.firebasestorage.app",
+      messagingSenderId: "961327164320",
+      appId: "1:961327164320:web:7ffb160db2529f4c1412c5",
+      measurementId: "G-56962H6FQ4"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    getAnalytics(app);
+    const auth = getAuth(app);
+
+    const navUsername = document.getElementById("nav-username");
+    const dashUsername = document.getElementById("dash-username");
+    const dashEmail = document.getElementById("dash-email");
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        // যদি লগ ইন না থাকে, হোম পেজে ফেরত পাঠাই
+        window.location.href = "index.html#auth";
+        return;
+      }
+      const name = user.displayName || user.email;
+      if (navUsername) navUsername.textContent = "Welcome, " + name;
+      if (dashUsername) dashUsername.textContent = name;
+      if (dashEmail) dashEmail.textContent = user.email || "";
+    });
+
+    const logoutBtn = document.getElementById("logout-btn");
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", async () => {
+        await signOut(auth);
+        alert("🔓 Logged out");
+        window.location.href = "index.html";
+      });
+    }
+  </script>
+</body>
+</html>
