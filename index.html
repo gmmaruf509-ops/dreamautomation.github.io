@@ -755,6 +755,9 @@
         if (form) form.classList.add("active");
       });
     });
+   // আলাদা করে ট্যাবগুলোর রেফারেন্স
+const signupTab = document.querySelector('.auth-tab[data-target="signup-form"]');
+const loginTab  = document.querySelector('.auth-tab[data-target="login-form"]');
 
     // ---------- Firebase Setup ----------
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
