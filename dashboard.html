@@ -1,731 +1,820 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Dashboard – Dream Automation</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <head>
+    <meta charset="utf-8" />
+    <title>Dashboard – Dream Automation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    <style>
+      :root {
+        --bg-main: #020617;
+        --bg-card: #020617;
+        --bg-card-soft: #020617;
+        --accent: #22c55e;
+        --accent-soft: #22c55e22;
+        --accent-hover: #16a34a;
+        --border-soft: #1e293b;
+        --text-main: #e5e7eb;
+        --text-muted: #9ca3af;
+        --danger: #f97373;
+      }
 
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
-      background: radial-gradient(circle at top, #3a4bff 0, #050018 55%, #02000b 100%);
-      color: #f9fafb;
-      min-height: 100vh;
-    }
+      * {
+        box-sizing: border-box;
+      }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        background: radial-gradient(circle at top left, #1d4ed8 0, #020617 45%)
+            no-repeat,
+          radial-gradient(circle at top right, #0f766e 0, #020617 40%) no-repeat,
+          #020617;
+        color: var(--text-main);
+        display: flex;
+      }
 
-    .app-shell {
-      display: flex;
-      min-height: 100vh;
-    }
-
-    /* ===== sidebar ===== */
-
-    .sidebar {
-      width: 220px;
-      background: rgba(3, 7, 18, 0.95);
-      border-right: 1px solid rgba(148, 163, 184, 0.15);
-      padding: 18px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .brand-logo {
-      width: 32px;
-      height: 32px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, #22c55e, #0ea5e9);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 18px;
-    }
-
-    .brand-text {
-      font-size: 15px;
-      font-weight: 600;
-    }
-
-    .nav-section-title {
-      font-size: 11px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: rgba(148, 163, 184, 0.9);
-      margin: 6px 0 4px;
-    }
-
-    .nav-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .nav-item > a {
-      display: block;
-      padding: 8px 10px;
-      border-radius: 8px;
-      font-size: 13px;
-      color: rgba(226, 232, 240, 0.9);
-    }
-
-    .nav-item.active > a {
-      background: linear-gradient(90deg, #22c55e, #0ea5e9);
-      color: #020617;
-      font-weight: 600;
-    }
-
-    .nav-item > a:hover {
-      background: rgba(15, 23, 42, 0.9);
-    }
-
-    .sidebar-footer {
-      margin-top: auto;
-      font-size: 11px;
-      color: rgba(148, 163, 184, 0.7);
-    }
-
-    /* ===== main ===== */
-
-    .main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .topbar {
-      height: 56px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 26px;
-      border-bottom: 1px solid rgba(148, 163, 184, 0.15);
-      background: radial-gradient(circle at top left, #1f2937 0, #020617 55%);
-      backdrop-filter: blur(18px);
-    }
-
-    .topbar-left {
-      font-size: 13px;
-      color: rgba(148, 163, 184, 0.9);
-    }
-
-    .topbar-left span {
-      color: #e5e7eb;
-      font-weight: 600;
-    }
-
-    .topbar-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 13px;
-    }
-
-    .pill {
-      padding: 4px 10px;
-      border-radius: 999px;
-      font-size: 11px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(148, 163, 184, 0.35);
-      color: rgba(226, 232, 240, 0.9);
-    }
-
-    .btn {
-      border: none;
-      border-radius: 999px;
-      padding: 6px 16px;
-      font-size: 13px;
-      cursor: pointer;
-      background: #0f172a;
-      color: #e5e7eb;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-    }
-
-    .btn:hover {
-      background: rgba(15, 23, 42, 0.9);
-    }
-
-    .btn-primary {
-      background: linear-gradient(90deg, #22c55e, #0ea5e9);
-      color: #020617;
-      border-color: transparent;
-      font-weight: 600;
-    }
-
-    .btn-primary:hover {
-      filter: brightness(1.05);
-    }
-
-    .btn-wide {
-      width: 100%;
-      justify-content: center;
-      text-align: center;
-    }
-
-    .btn:disabled {
-      opacity: 0.6;
-      cursor: default;
-    }
-
-    /* ===== content ===== */
-
-    .content {
-      flex: 1;
-      padding: 24px 26px 30px;
-      display: flex;
-      flex-direction: column;
-      gap: 22px;
-    }
-
-    h1 {
-      font-size: 26px;
-      font-weight: 700;
-      margin-bottom: 2px;
-    }
-
-    .subtitle {
-      font-size: 13px;
-      color: rgba(148, 163, 184, 0.9);
-    }
-
-    .grid-two {
-      display: grid;
-      grid-template-columns: 2.1fr 1.2fr;
-      gap: 18px;
-      align-items: flex-start;
-    }
-
-    .card {
-      border-radius: 18px;
-      background: radial-gradient(circle at top left,
-          rgba(30, 64, 175, 0.45),
-          rgba(15, 23, 42, 0.98));
-      padding: 18px 20px 18px;
-      border: 1px solid rgba(148, 163, 184, 0.25);
-      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.85);
-    }
-
-    .card h3 {
-      font-size: 15px;
-      margin-bottom: 10px;
-    }
-
-    .muted {
-      font-size: 12px;
-      color: rgba(148, 163, 184, 0.9);
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 4px 12px;
-      border-radius: 999px;
-      font-size: 11px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(148, 163, 184, 0.55);
-      color: #e5e7eb;
-      gap: 6px;
-    }
-
-    .badge-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: #22c55e;
-    }
-
-    .account-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-      gap: 10px;
-    }
-
-    .account-meta {
-      font-size: 12px;
-      color: rgba(148, 163, 184, 0.9);
-    }
-
-    .account-meta p + p {
-      margin-top: 4px;
-    }
-
-    .trial-bar {
-      margin-top: 10px;
-      border-radius: 999px;
-      padding: 10px 14px;
-      text-align: center;
-      font-size: 13px;
-      font-weight: 500;
-      background: linear-gradient(90deg, #22c55e, #0ea5e9);
-      color: #020617;
-    }
-
-    .trial-bar span {
-      font-weight: 600;
-    }
-
-    .trial-actions {
-      margin-top: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .trial-status-text {
-      font-size: 12px;
-      color: rgba(148, 163, 184, 0.95);
-    }
-
-    /* ===== Trial Key – বড় লেখা ===== */
-
-    .trial-key-box {
-      margin-top: 10px;
-      padding: 14px 18px;
-      border-radius: 12px;
-      background: rgba(15, 23, 42, 0.85);
-      border: 1px dashed rgba(148, 163, 184, 0.75);
-      text-align: center;
-    }
-
-    .trial-key {
-      font-family: "Fira Code", "Consolas", monospace;
-      font-size: 22px !important; /* এখানে সাইজ বড় */
-      letter-spacing: 0.10em;
-      color: #ffffff;
-      user-select: all;
-      word-break: break-all;
-    }
-
-    .trial-key-label {
-      font-weight: 700;
-      margin-right: 8px;
-    }
-
-    .trial-key-value {
-      font-weight: 600;
-    }
-
-    /* ===== bottom ===== */
-
-    .footer {
-      margin-top: auto;
-      font-size: 11px;
-      text-align: center;
-      color: rgba(148, 163, 184, 0.75);
-      padding-top: 10px;
-    }
-
-    @media (max-width: 960px) {
-      .app-shell {
+      /* ========== SIDEBAR ========== */
+      .sidebar {
+        width: 230px;
+        background: #020617f8;
+        border-right: 1px solid var(--border-soft);
+        padding: 18px 16px;
+        display: flex;
         flex-direction: column;
       }
-      .sidebar {
-        width: 100%;
-        flex-direction: row;
+
+      .brand {
+        display: flex;
         align-items: center;
-        overflow-x: auto;
+        gap: 10px;
+        margin-bottom: 22px;
       }
+
+      .brand-logo {
+        width: 32px;
+        height: 32px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #22c55e, #0ea5e9);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 15px;
+      }
+
+      .brand-name {
+        font-weight: 600;
+        font-size: 15px;
+      }
+
+      .sidebar-section-title {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #6b7280;
+        margin: 20px 0 8px;
+      }
+
+      .sidebar-nav {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .sidebar-nav li {
+        margin-bottom: 4px;
+      }
+
+      .sidebar-link {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 10px;
+        border-radius: 999px;
+        font-size: 13px;
+        color: var(--text-muted);
+        text-decoration: none;
+        transition: background 0.15s, color 0.15s, transform 0.1s;
+      }
+
+      .sidebar-link.active {
+        background: var(--accent-soft);
+        color: #bbf7d0;
+      }
+
+      .sidebar-link:hover {
+        background: #020617;
+        color: var(--text-main);
+        transform: translateY(-1px);
+      }
+
+      /* ========== MAIN LAYOUT ========== */
       .main {
         flex: 1;
+        display: flex;
+        flex-direction: column;
       }
-      .grid-two {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
-</head>
 
-<body>
-  <div class="app-shell">
-    <!-- ===== SIDEBAR ===== -->
+      header {
+        height: 52px;
+        border-bottom: 1px solid var(--border-soft);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 24px;
+        background: #020617cc;
+        backdrop-filter: blur(14px);
+      }
+
+      .breadcrumb {
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+
+      .nav-actions {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        font-size: 13px;
+      }
+
+      .nav-hello {
+        color: var(--text-muted);
+      }
+
+      .nav-hello span {
+        color: var(--text-main);
+        font-weight: 500;
+      }
+
+      .btn-nav {
+        border-radius: 999px;
+        background: #020617;
+        border: 1px solid var(--border-soft);
+        padding: 6px 12px;
+        color: var(--text-main);
+        font-size: 12px;
+        cursor: pointer;
+        transition: background 0.15s, border-color 0.15s, transform 0.1s;
+      }
+
+      .btn-nav:hover {
+        background: #0f172a;
+        border-color: #334155;
+        transform: translateY(-1px);
+      }
+
+      .btn-nav.danger {
+        background: #b91c1c;
+        border-color: #fecaca33;
+      }
+
+      .btn-nav.danger:hover {
+        background: #ef4444;
+      }
+
+      /* ========== PAGE CONTENT ========== */
+      .content {
+        padding: 24px 26px 30px;
+        overflow-y: auto;
+      }
+
+      .page-title {
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0 0 10px;
+      }
+
+      .page-subtitle {
+        font-size: 13px;
+        color: var(--text-muted);
+        margin-bottom: 20px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.6fr);
+        gap: 18px;
+        margin-bottom: 24px;
+      }
+
+      .card {
+        background: #020617dd;
+        border-radius: 18px;
+        border: 1px solid var(--border-soft);
+        padding: 18px 18px 16px;
+        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.7);
+      }
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+
+      .card-title {
+        font-size: 15px;
+        font-weight: 600;
+      }
+
+      .badge {
+        font-size: 11px;
+        padding: 3px 8px;
+        border-radius: 999px;
+        border: 1px solid #4b5563;
+        color: #e5e7eb;
+      }
+
+      .product-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 10px;
+      }
+
+      .pill {
+        font-size: 11px;
+        padding: 4px 8px;
+        border-radius: 999px;
+        border: 1px solid #4b5563;
+        color: #e5e7eb;
+      }
+
+      .progress-bar {
+        margin-top: 18px;
+        border-radius: 999px;
+        background: #020617;
+        padding: 3px;
+        border: 1px solid #1e293b;
+      }
+
+      .progress-bar-inner {
+        height: 22px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #22c55e, #0ea5e9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      /* Account overview */
+      .account-row {
+        font-size: 13px;
+        display: flex;
+        justify-content: space-between;
+        margin: 3px 0;
+        color: var(--text-muted);
+      }
+
+      .account-row span.value {
+        color: var(--text-main);
+      }
+
+      .status-pill {
+        padding: 3px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .status-pill.free {
+        background: #020617;
+        color: #bbf7d0;
+        border: 1px solid #16a34a55;
+      }
+
+      .status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 999px;
+        background: #22c55e;
+      }
+
+      .primary-btn,
+      .secondary-btn {
+        width: 100%;
+        border-radius: 999px;
+        border: none;
+        padding: 9px 14px;
+        margin-top: 10px;
+        font-size: 13px;
+        cursor: pointer;
+        transition: transform 0.08s, box-shadow 0.12s, filter 0.12s,
+          background 0.12s;
+      }
+
+      .primary-btn {
+        background: linear-gradient(90deg, #22c55e, #0ea5e9);
+        color: #000;
+        font-weight: 600;
+      }
+
+      .primary-btn:hover:not(:disabled) {
+        filter: brightness(1.04);
+        transform: translateY(-1px);
+        box-shadow: 0 10px 25px rgba(34, 197, 94, 0.4);
+      }
+
+      .primary-btn:disabled {
+        opacity: 0.6;
+        cursor: default;
+        box-shadow: none;
+      }
+
+      .secondary-btn {
+        background: #020617;
+        color: var(--text-main);
+        border: 1px solid #1e293b;
+      }
+
+      .secondary-btn:hover:not(:disabled) {
+        background: #020617;
+        border-color: #334155;
+        transform: translateY(-1px);
+      }
+
+      .status-text {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-top: 8px;
+        min-height: 18px;
+      }
+
+      .status-text.error {
+        color: var(--danger);
+      }
+
+      /* Trial key box – বড় key দেখানোর জন্য */
+      .trial-key-box {
+        margin-top: 12px;
+        padding: 14px 18px;
+        border-radius: 12px;
+        background: rgba(15, 23, 42, 0.95);
+        border: 1px dashed rgba(148, 163, 184, 0.8);
+        text-align: center;
+      }
+
+      .trial-key {
+        font-family: "Fira Code", "Consolas", monospace;
+        font-size: 22px;
+        letter-spacing: 0.08em;
+        color: #ffffff;
+        user-select: all;
+        word-break: break-all;
+      }
+
+      .trial-key-label {
+        font-weight: 700;
+        margin-right: 8px;
+      }
+
+      .trial-key-value {
+        font-weight: 600;
+      }
+
+      /* Tools section (সংক্ষিপ্ত) */
+      .tools-card {
+        margin-top: 6px;
+        padding: 16px 18px 14px;
+      }
+
+      .tools-title {
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+
+      .tool-item {
+        font-size: 13px;
+        margin-bottom: 4px;
+        color: var(--text-muted);
+      }
+
+      .tool-item strong {
+        color: var(--text-main);
+      }
+
+      @media (max-width: 980px) {
+        body {
+          flex-direction: column;
+        }
+        .sidebar {
+          width: 100%;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+          border-right: none;
+          border-bottom: 1px solid var(--border-soft);
+        }
+        .main {
+          flex: 1;
+        }
+        .grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- SIDEBAR -->
     <aside class="sidebar">
       <div>
         <div class="brand">
           <div class="brand-logo">DA</div>
-          <div class="brand-text">Dream Automation</div>
+          <div class="brand-name">Dream Automation</div>
         </div>
 
-        <div class="nav-section">
-          <div class="nav-section-title">Main</div>
-          <ul class="nav-list">
-            <li class="nav-item active"><a href="#">Dashboard</a></li>
-            <li class="nav-item"><a href="#">My Products</a></li>
-            <li class="nav-item"><a href="#">Orders</a></li>
-          </ul>
-        </div>
+        <div class="sidebar-section-title">Main</div>
+        <ul class="sidebar-nav">
+          <li>
+            <a class="sidebar-link active" href="#">
+              Dashboard
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="#">
+              My Products
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="#">
+              Orders
+            </a>
+          </li>
+        </ul>
 
-        <div class="nav-section">
-          <div class="nav-section-title">Account</div>
-          <ul class="nav-list">
-            <li class="nav-item"><a href="#">Account Settings</a></li>
-            <li class="nav-item"><a href="#">Support Center</a></li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="sidebar-footer">
-        © <span id="year"></span> Dream Automation
+        <div class="sidebar-section-title">Account</div>
+        <ul class="sidebar-nav">
+          <li>
+            <a class="sidebar-link" href="#">Account Settings</a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="#">Support Center</a>
+          </li>
+        </ul>
       </div>
     </aside>
 
-    <!-- ===== MAIN ===== -->
-    <main class="main">
-      <!-- topbar -->
-      <header class="topbar">
-        <div class="topbar-left">
-          Manage your licenses &amp; downloads
-          <span> · Dashboard</span>
+    <!-- MAIN -->
+    <div class="main">
+      <header>
+        <div class="breadcrumb">
+          Manage your licenses &amp; downloads • <strong>Dashboard</strong>
         </div>
-        <div class="topbar-right">
-          <div class="pill">
-            Welcome, <span id="nav-username">loading...</span>
+        <div class="nav-actions">
+          <div class="nav-hello">
+            Welcome, <span id="nav-username">user</span>
           </div>
-          <button class="btn" id="back-to-site-btn">Back to site</button>
-          <button class="btn btn-primary" id="logout-btn">Log out</button>
+          <button
+            class="btn-nav"
+            type="button"
+            onclick="window.location.href='index.html'"
+          >
+            Back to site
+          </button>
+          <button class="btn-nav danger" id="logout-btn" type="button">
+            Log out
+          </button>
         </div>
       </header>
 
-      <!-- content -->
-      <section class="content">
-        <div>
-          <h1>Welcome, <span id="dash-username">loading...</span></h1>
-          <p class="subtitle">
-            Manage your license, download the software and access all automation
-            tools from a single dashboard.
-          </p>
-        </div>
+      <main class="content">
+        <h1 class="page-title" id="dash-username">Welcome</h1>
+        <p class="page-subtitle">
+          Manage your license, download the software and access all AI tools
+          from a single dashboard.
+        </p>
 
-        <div class="grid-two">
-          <!-- LEFT: Product / downloads -->
-          <article class="card">
-            <h3>Your Product</h3>
-            <p class="muted" style="margin-bottom: 10px;">
-              Dream Automation – all-in-one automation software for your business.
-            </p>
-
-            <div style="margin-top: 8px; margin-bottom: 8px;">
-              <span class="badge">
-                <span class="badge-dot"></span>
-                AI-powered
-              </span>
-              <span class="badge" style="margin-left: 6px;">
-                1-click workflows
-              </span>
-              <span class="badge" style="margin-left: 6px;">
-                Lifetime updates (lifetime plan)
-              </span>
+        <div class="grid">
+          <!-- LEFT: PRODUCT CARD -->
+          <section class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Your Product</div>
+                <div style="font-size: 12px; color: var(--text-muted)">
+                  Dream Automation – all-in-one automation software for your
+                  business.
+                </div>
+              </div>
+              <div class="badge">AI-powered</div>
             </div>
 
-            <button class="btn btn-primary btn-wide" style="margin-top: 16px;">
-              ↓ Download Software
-            </button>
+            <div class="product-meta">
+              <div class="pill">1-click workflows</div>
+              <div class="pill">Lifetime updates (lifetime plan)</div>
+              <div class="pill">Multi-platform</div>
+            </div>
 
-            <button class="btn btn-wide" style="margin-top: 10px;">
-              🛒 Buy Lifetime Access
-            </button>
-          </article>
-
-          <!-- RIGHT: Account overview -->
-          <article class="card">
-            <div class="account-header">
-              <h3>Account Overview</h3>
-              <div class="badge" id="plan-badge">
-                <span class="badge-dot"></span>
-                <span id="badge-text">Free</span>
+            <div class="progress-bar">
+              <div class="progress-bar-inner">
+                ↓ Download Software
               </div>
             </div>
 
-            <div class="account-meta">
-              <p>
-                <strong>Email:</strong>
-                <span id="dash-email">loading...</span>
-              </p>
-              <p>
-                <strong>Plan:</strong>
-                <span id="plan-label">Free / Trial (loading)</span>
-              </p>
-              <p>
-                <strong>Status:</strong>
-                <span id="status-label">Loading...</span>
-              </p>
+            <button class="secondary-btn" type="button">
+              ⬇ Buy Lifetime Access
+            </button>
+          </section>
+
+          <!-- RIGHT: ACCOUNT OVERVIEW -->
+          <section class="card">
+            <div class="card-header">
+              <div class="card-title">Account Overview</div>
+              <div class="status-pill free">
+                <span class="status-dot"></span> <span id="plan-label">Free</span>
+              </div>
             </div>
 
-            <!-- Trial banner -->
-            <div class="trial-bar" id="trial-bar">
-              <span id="trial-bar-label">Free</span>
+            <div class="account-row">
+              <span>Email</span>
+              <span class="value" id="account-email">loading…</span>
+            </div>
+            <div class="account-row">
+              <span>Plan</span>
+              <span class="value" id="account-plan">Free / Trial (loading)</span>
+            </div>
+            <div class="account-row">
+              <span>Status</span>
+              <span class="value" id="account-status">Loading…</span>
             </div>
 
-            <!-- Trial controls -->
-            <div class="trial-actions">
-              <button
-                class="btn btn-primary btn-wide"
-                id="request-trial-btn">
-                Request 2-Day Free Trial
-              </button>
+            <button class="primary-btn" id="trial-main-btn" disabled>
+              Loading trial status…
+            </button>
 
-              <p class="trial-status-text" id="trial-status-text">
-                Loading trial status...
-              </p>
+            <button class="secondary-btn" id="request-trial-btn" type="button">
+              Request 2-Day Free Trial
+            </button>
+
+            <div class="status-text" id="trial-status-text">
+              Checking your trial status…
             </div>
 
-            <!-- বড় করে key দেখানোর জন্য -->
+            <!-- BIG trial key display -->
             <div
               class="trial-key-box"
               id="trial-key-box"
-              style="display: none">
+              style="display: none"
+            >
               <div class="trial-key">
-                <span class="trial-key-label">Your Key = </span>
-                <span
-                  class="trial-key-value"
-                  id="trial-key-text">
+                <span class="trial-key-label">Your Key =</span>
+                <span class="trial-key-value" id="trial-key-text">
                   00000000-0000-0000-0000-000000000000
                 </span>
               </div>
             </div>
-          </article>
+          </section>
         </div>
 
-        <div class="footer">
-          Need help? Contact us any time — your success with Dream Automation is
-          our top priority.
-        </div>
-      </section>
-    </main>
-  </div>
+        <!-- SHORT TOOLS LIST (ডিজাইন পূরণের জন্য) -->
+        <section class="card tools-card">
+          <div class="tools-title">Available AI Tools</div>
 
-  <!-- ===== Firebase + Trial logic ===== -->
-  <script type="module">
-    // footer year
-    const yearEl = document.getElementById("year");
-    if (yearEl) yearEl.textContent = new Date().getFullYear();
+          <div class="tool-item">
+            <strong>✔ YouTube Video → AI Video (One Click)</strong> – এক ক্লিকে
+            YouTube লিংক থেকে সম্পূর্ণ AI ভিডিও তৈরি।
+          </div>
+          <div class="tool-item">
+            <strong>✔ Script → Long Video (One Click)</strong> – স্ক্রিপ্ট দিন →
+            AI অটো স্টোরিবোর্ড + সিন + দীর্ঘ ভিডিও তৈরি করবে।
+          </div>
+          <div class="tool-item">
+            <strong>✔ Text → Video (AI Video Generator)</strong> – যেকোনো টেক্সট
+            → অটো ভিজ্যুয়াল, সিন, ভিডিও।
+          </div>
+          <div class="tool-item">
+            <strong>✔ Video Prompt Generator</strong> – যেকোনো ভিডিও থেকে
+            scene-by-scene প্রম্পট অটো জেনারেট।
+          </div>
+          <div class="tool-item">
+            <strong>✔ AI Cinematic Scene Helper</strong> – ব্যবহার অনুযায়ী AI
+            সিনেমাটিক শট সাজিয়ে দেয়।
+          </div>
+        </section>
+      </main>
+    </div>
 
-    const backBtn = document.getElementById("back-to-site-btn");
-    if (backBtn) {
-      backBtn.addEventListener("click", () => {
-        window.location.href = "index.html";
-      });
-    }
+    <!-- ========== SCRIPTS ========== -->
+    <script type="module">
+      // ==== Apps Script bridge URL ====
+      const BRIDGE_API_URL =
+        "https://script.google.com/macros/s/AKfycbwUMn-tpNUlbaOoYQLA_7RRS_geJ-Vl0z1gLs8goCMB62yyXaTeJr4xKU3SRZGnoIMK/exec";
 
-    // ===== Apps Script bridge URL =====
-    const BRIDGE_API_URL =
-      "https://script.google.com/macros/s/AKfycbwUMn-tpNUlbaOoYQLA_7RRS_geJ-Vl0z1gLs8goCMB62yyXaTeJr4xKU3SRZGnoIMK/exec";
+      // ==== Firebase imports ====
+      import {
+        initializeApp,
+      } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+      import {
+        getAnalytics,
+      } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
+      import {
+        getAuth,
+        onAuthStateChanged,
+        signOut,
+      } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
-    async function callTrialApi(action, email) {
-      const res = await fetch(BRIDGE_API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action, email }),
-      });
-      return await res.json();
-    }
+      // ==== Firebase config (তোমার প্রজেক্ট অনুযায়ী) ====
+      const firebaseConfig = {
+        apiKey: "AIzaSyA_lZmfn4T31B6jm1dB0UywR7OEgYIPlo0",
+        authDomain: "sceneflow-studio.firebaseapp.com",
+        projectId: "sceneflow-studio",
+        storageBucket: "sceneflow-studio.firebasestorage.app",
+        messagingSenderId: "961327164320",
+        appId: "1:961327164320:web:7ffb160db2529f4c1412c5",
+        measurementId: "G-56962H6FQ4",
+      };
 
-    // ===== Firebase imports =====
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
-    import {
-      getAuth,
-      onAuthStateChanged,
-      signOut,
-    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+      const app = initializeApp(firebaseConfig);
+      getAnalytics(app);
+      const auth = getAuth(app);
 
-    // ===== Firebase config (তোমার প্রজেক্ট) =====
-    const firebaseConfig = {
-      apiKey: "AIzaSyA_lZmfn4T31B6jm1dB0UywR7OEgYIPlo0",
-      authDomain: "sceneflow-studio.firebaseapp.com",
-      projectId: "sceneflow-studio",
-      storageBucket: "sceneflow-studio.firebasestorage.app",
-      messagingSenderId: "961327164320",
-      appId: "1:961327164320:web:7ffb160db2529f4c1412c5",
-      measurementId: "G-56962H6FQ4",
-    };
+      // ==== DOM refs ====
+      const navUsernameEl = document.getElementById("nav-username");
+      const dashUsernameEl = document.getElementById("dash-username");
+      const accountEmailEl = document.getElementById("account-email");
+      const accountPlanEl = document.getElementById("account-plan");
+      const accountStatusEl = document.getElementById("account-status");
+      const planLabelEl = document.getElementById("plan-label");
 
-    const app = initializeApp(firebaseConfig);
-    getAnalytics(app);
-    const auth = getAuth(app);
+      const trialMainBtn = document.getElementById("trial-main-btn");
+      const requestTrialBtn = document.getElementById("request-trial-btn");
+      const trialStatusText = document.getElementById("trial-status-text");
+      const trialKeyBox = document.getElementById("trial-key-box");
+      const trialKeyText = document.getElementById("trial-key-text");
 
-    // ===== DOM refs =====
-    const navUsername = document.getElementById("nav-username");
-    const dashUsername = document.getElementById("dash-username");
-    const dashEmail = document.getElementById("dash-email");
-    const planLabel = document.getElementById("plan-label");
-    const statusLabel = document.getElementById("status-label");
-    const badgeText = document.getElementById("badge-text");
-    const trialBar = document.getElementById("trial-bar");
-    const trialBarLabel = document.getElementById("trial-bar-label");
-    const trialBtn = document.getElementById("request-trial-btn");
-    const trialStatusText = document.getElementById("trial-status-text");
-    const trialKeyBox = document.getElementById("trial-key-box");
-    const trialKeyText = document.getElementById("trial-key-text");
-    const logoutBtn = document.getElementById("logout-btn");
+      const logoutBtn = document.getElementById("logout-btn");
 
-    // ===== date helper: দিন মাস বছর =====
-    function formatDateDMY(isoString) {
-      const d = new Date(isoString);
-      if (isNaN(d.getTime())) return isoString;
-      const months = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ];
-      const day = d.getUTCDate();
-      const month = months[d.getUTCMonth()];
-      const year = d.getUTCFullYear();
-      return `${day} ${month} ${year}`;
-    }
+      // ==== Helper: expiry date সুন্দর ফরম্যাটে ====
+      function formatExpiryDMY(isoString) {
+        const d = new Date(isoString);
+        if (isNaN(d.getTime())) return isoString;
 
-    // ===== trial status load =====
-    async function loadTrialStatus(email) {
-      trialStatusText.textContent = "Loading trial status...";
-      trialKeyBox.style.display = "none";
+        const months = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
 
-      try {
-        const data = await callTrialApi("trial_status", email);
+        const day = d.getUTCDate();
+        const month = months[d.getUTCMonth()];
+        const year = d.getUTCFullYear();
 
+        return `${day} ${month} ${year}`; // শুধু দিন মাস বছর
+      }
+
+      // ==== Apps Script API caller ====
+      async function callTrialApi(action, email) {
+        const res = await fetch(BRIDGE_API_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ action, email }),
+        });
+
+        if (!res.ok) {
+          throw new Error("HTTP " + res.status);
+        }
+
+        const data = await res.json();
         if (data.status !== "ok") {
-          throw new Error(data.message || "Unknown error");
+          throw new Error(data.message || "API error");
         }
-
-        // mode: আমরা Code.gs এ যেমন সেট করেছি – উদাহরণ:
-        // "none", "trial_active", "trial_expired", "paid"
-        const mode = data.mode || "none";
-
-        if (mode === "none") {
-          planLabel.textContent = "Free / Trial (not requested)";
-          statusLabel.textContent = "Free";
-          badgeText.textContent = "Free";
-          trialBarLabel.textContent = "Free";
-          trialBar.textContent = "Free plan – you haven't used your trial yet.";
-          trialBtn.style.display = "inline-flex";
-          trialBtn.disabled = false;
-          trialBtn.textContent = "Request 2-Day Free Trial";
-          trialStatusText.textContent =
-            "You can request a 2-day free trial. Click the button above.";
-        } else if (mode === "trial_active") {
-          planLabel.textContent = "Trial (active)";
-          statusLabel.textContent = "Active";
-          badgeText.textContent = "Trial";
-          trialBarLabel.textContent = "Trial active";
-
-          const niceDate = formatDateDMY(data.expiry);
-          trialBar.textContent = `Trial active · Expires on ${niceDate}`;
-          trialBtn.style.display = "none";
-
-          trialStatusText.textContent =
-            "Your 2-day trial is active. Use the key below inside the software.";
-          trialKeyText.textContent = data.license_key || "";
-          trialKeyBox.style.display = "block";
-        } else if (mode === "trial_expired") {
-          planLabel.textContent = "Trial (expired)";
-          statusLabel.textContent = "Expired";
-          badgeText.textContent = "Trial expired";
-          trialBarLabel.textContent = "Trial expired";
-
-          const niceDate = formatDateDMY(data.expiry);
-          trialBar.textContent = `Your trial expired on ${niceDate}`;
-          trialBtn.style.display = "none";
-          trialKeyBox.style.display = "none";
-          trialStatusText.textContent =
-            "Your trial has ended. Please purchase a license to continue.";
-        } else if (mode === "paid") {
-          planLabel.textContent = "Paid";
-          statusLabel.textContent = "Active";
-          badgeText.textContent = "Lifetime";
-          trialBarLabel.textContent = "Lifetime license";
-          trialBar.textContent =
-            "You have an active paid license. Enjoy all features without limits.";
-          trialBtn.style.display = "none";
-          trialKeyBox.style.display = "none";
-          trialStatusText.textContent = "";
-        } else {
-          throw new Error("Unknown mode");
-        }
-      } catch (err) {
-        console.error(err);
-        trialBarLabel.textContent = "Error";
-        trialBar.textContent = "Error loading trial status.";
-        trialStatusText.textContent =
-          "Could not load trial status. Please try again later.";
-        badgeText.textContent = "Free";
-        trialBtn.style.display = "inline-flex";
-      }
-    }
-
-    // ===== main auth handler =====
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        window.location.href = "index.html";
-        return;
+        return data;
       }
 
-      const email = user.email || "";
-      const name =
-        user.displayName || (email ? email.split("@")[0] : "User");
+      async function loadTrialStatus(email) {
+        trialMainBtn.disabled = true;
+        trialMainBtn.textContent = "Loading trial status…";
+        trialStatusText.classList.remove("error");
+        trialStatusText.textContent = "Checking your trial status…";
+        trialKeyBox.style.display = "none";
 
-      if (navUsername) navUsername.textContent = name;
-      if (dashUsername) dashUsername.textContent = name;
-      if (dashEmail) dashEmail.textContent = email;
+        try {
+          const data = await callTrialApi("trial_status", email);
 
-      await loadTrialStatus(email);
+          const mode = data.mode || "none";
 
-      if (trialBtn) {
-        trialBtn.addEventListener("click", async () => {
-          trialBtn.disabled = true;
-          trialBtn.textContent = "Requesting...";
-          try {
-            const data = await callTrialApi("trial_create", email);
-            if (data.status === "ok") {
-              alert("Trial created! Your key is now visible.");
-              await loadTrialStatus(email);
-            } else {
-              alert(data.message || "Could not create trial.");
-            }
-          } catch (e) {
-            console.error(e);
-            alert("Network error while requesting trial.");
-          } finally {
-            trialBtn.disabled = false;
+          if (mode === "trial_active") {
+            const niceDate = formatExpiryDMY(data.expiry);
+            accountPlanEl.textContent = "Trial (active)";
+            accountStatusEl.textContent = "Active";
+            planLabelEl.textContent = "Trial";
+            trialMainBtn.textContent = "Trial active";
+            trialMainBtn.disabled = true;
+
+            trialStatusText.textContent =
+              "Your 2-day trial is active. Expires on: " + niceDate;
+
+            trialKeyText.textContent = data.key;
+            trialKeyBox.style.display = "block";
+          } else if (mode === "already_has_trial") {
+            accountPlanEl.textContent = "Free / Trial (used)";
+            accountStatusEl.textContent = "No trial available";
+            planLabelEl.textContent = "Free";
+            trialMainBtn.textContent = "Trial not available";
+            trialMainBtn.disabled = true;
+            trialStatusText.textContent =
+              "You have already used your free trial for this email.";
+          } else {
+            accountPlanEl.textContent = "Free / Trial (not requested)";
+            accountStatusEl.textContent = "Free";
+            planLabelEl.textContent = "Free";
+            trialMainBtn.textContent = "Trial not active";
+            trialMainBtn.disabled = true;
+            trialStatusText.textContent =
+              "You can request a 2-day free trial. Click the button below.";
           }
-        });
+        } catch (err) {
+          console.error(err);
+          accountStatusEl.textContent = "Error";
+          trialStatusText.textContent =
+            "Error loading trial status. Please try again later.";
+          trialStatusText.classList.add("error");
+          trialMainBtn.textContent = "Error";
+        }
       }
 
-      if (logoutBtn) {
-        logoutBtn.addEventListener("click", async () => {
-          await signOut(auth);
-          window.location.href = "index.html";
-        });
+      async function handleRequestTrial(email) {
+        requestTrialBtn.disabled = true;
+        requestTrialBtn.textContent = "Requesting…";
+
+        try {
+          const data = await callTrialApi("trial_create", email);
+
+          if (data.mode === "trial_active") {
+            // new trial created
+            await loadTrialStatus(email);
+          } else {
+            // API যদি অন্য মেসেজ দেয়
+            await loadTrialStatus(email);
+          }
+        } catch (err) {
+          console.error(err);
+          trialStatusText.textContent =
+            "Could not create free trial. " + (err.message || "");
+          trialStatusText.classList.add("error");
+        } finally {
+          requestTrialBtn.disabled = false;
+          requestTrialBtn.textContent = "Request 2-Day Free Trial";
+        }
       }
-    });
-  </script>
-</body>
+
+      // ==== Auth state ====
+      onAuthStateChanged(auth, (user) => {
+        if (!user) {
+          // লগইন না থাকলে হোম পেজে
+          window.location.href = "index.html";
+          return;
+        }
+
+        const name = user.displayName || user.email.split("@")[0];
+        navUsernameEl.textContent = name;
+        dashUsernameEl.textContent = "Welcome, " + name;
+        accountEmailEl.textContent = user.email;
+
+        loadTrialStatus(user.email);
+      });
+
+      // ==== Logout ====
+      logoutBtn.addEventListener("click", async () => {
+        try {
+          await signOut(auth);
+        } catch (e) {
+          console.error(e);
+        }
+        window.location.href = "index.html";
+      });
+
+      // ==== Request trial button ====
+      requestTrialBtn.addEventListener("click", async () => {
+        const user = auth.currentUser;
+        if (!user) return;
+        await handleRequestTrial(user.email);
+      });
+    </script>
+  </body>
 </html>
