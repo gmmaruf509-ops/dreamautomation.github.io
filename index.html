@@ -485,17 +485,15 @@
   <main class="container">
     <section class="hero">
       <div>
-        
         <h1 class="hero-title">
-  One-click <span class="highlight">AI videos</span><br />
-  from YouTube links &amp; scripts
-</h1>
-<p class="hero-subtitle">
-  SceneFlow Studio আপনার ইউটিউব ভিডিও এবং স্ক্রিপ্ট থেকে Veo 3 প্রম্পট স্বয়ংক্রিয়ভাবে তৈরি করে,
-  Flow দিয়ে সিনেমাটিক শট জেনারেট করে এবং সব শট একত্র করে ফাইনাল লং ভিডিও বানিয়ে দেয় – 
-  প্রায় কোন ম্যানুয়াল কাজ ছাড়াই।
-</p>
-
+          One-click <span class="highlight">AI videos</span><br />
+          from YouTube links &amp; scripts
+        </h1>
+        <p class="hero-subtitle">
+          SceneFlow Studio আপনার ইউটিউব ভিডিও এবং স্ক্রিপ্ট থেকে Veo 3 প্রম্পট স্বয়ংক্রিয়ভাবে তৈরি করে,
+          Flow দিয়ে সিনেমাটিক শট জেনারেট করে এবং সব শট একত্র করে ফাইনাল লং ভিডিও বানিয়ে দেয় – 
+          প্রায় কোন ম্যানুয়াল কাজ ছাড়াই।
+        </p>
 
         <!-- নতুন CTA বাটনগুলো -->
         <div class="hero-actions">
@@ -531,12 +529,12 @@
           </div>
           <div class="list-row">
             <span> Generator video Flow </span>
-             <span>Running</span>
+            <span>Running</span>
             <span>100 Video clips </span>
           </div>
           <div class="list-row">
             <span>Flow 100 Video clips </span>
-             <span>Marge</span>
+            <span>Marge</span>
             <span>1 Video Size 13 Minute Ready</span>
           </div>
         </div>
@@ -544,7 +542,7 @@
     </section>
   </main>
 
-  <!-- Features (আগের মতোই) -->
+  <!-- Features -->
   <section id="features" class="container">
     <div class="section-title">
       <h2>কেন ব্যবহার করবেন?</h2>
@@ -652,7 +650,7 @@
           </li>
           <li>
             <span class="auth-step-badge">2</span>
-            <span>ইনবক্সে গিয়ে ইমেইল verify করুন</span>
+            <span>ইমেইল ও পাসওয়ার্ড দিয়ে Login করুন</span>
           </li>
           <li>
             <span class="auth-step-badge">3</span>
@@ -701,9 +699,7 @@
             🚀 Sign Up
           </button>
 
-          <p class="auth-note">
-            
-          </p>
+          <p class="auth-note"></p>
         </form>
 
         <!-- LOGIN FORM -->
@@ -769,15 +765,14 @@
       signInWithEmailAndPassword,
       signOut,
       onAuthStateChanged,
-      updateProfile,
-      sendEmailVerification
+      updateProfile
     } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyA_lZmfn4T31B6jm1dB0UywR7OEgYIPlo0",
       authDomain: "sceneflow-studio.firebaseapp.com",
       projectId: "sceneflow-studio",
-      storageBucket: "sceneflow-studio.firebasestorage.app",
+      storageBucket: "sceneflow-studio.firebaseestorage.app",
       messagingSenderId: "961327164320",
       appId: "1:961327164320:web:7ffb160db2529f4c1412c5",
       measurementId: "G-56962H6FQ4"
@@ -790,9 +785,8 @@
     const navLoggedOut = document.getElementById("nav-logged-out");
     const navLoggedIn = document.getElementById("nav-logged-in");
     const navUsername = document.getElementById("nav-username");
-    const authSection = document.getElementById("auth");
 
-    // SIGN UP handler + email verification
+    // SIGN UP handler (no email verification)
     const signupForm = document.getElementById("signup-form");
     if (signupForm) {
       signupForm.addEventListener("submit", async (e) => {
@@ -806,10 +800,7 @@
           if (name) {
             await updateProfile(cred.user, { displayName: name });
           }
-          await sendEmailVerification(cred.user);
-          alert(
-            "✅ Sign up successful! We’ve sent a verification link to your email. Please verify, then log in."
-          );
+          alert("✅ Sign up successful! You can now log in with your email & password.");
           signupForm.reset();
           // ট্যাব বদলে Login দেখাই
           const loginTab = document.querySelector('.auth-tab[data-target="login-form"]');
@@ -820,7 +811,7 @@
       });
     }
 
-    // LOGIN handler (only if email verified)
+    // LOGIN handler (email verified দরকার নেই)
     const loginForm = document.getElementById("login-form");
     const loginStatus = document.getElementById("login-status");
     if (loginForm) {
@@ -830,19 +821,7 @@
         const password = document.getElementById("li-password").value;
 
         try {
-          const cred = await signInWithEmailAndPassword(auth, email, password);
-          const user = cred.user;
-
-          if (!user.emailVerified) {
-            await signOut(auth);
-            if (loginStatus) {
-              loginStatus.textContent =
-                "⚠ Please verify your email first. Check your inbox for the verification link.";
-            }
-            return;
-          }
-
-          // সব ঠিক থাকলে Dashboard এ নাও
+          await signInWithEmailAndPassword(auth, email, password);
           window.location.href = "dashboard.html";
         } catch (err) {
           if (loginStatus) loginStatus.textContent = "❌ Login error: " + err.message;
@@ -850,9 +829,9 @@
       });
     }
 
-    // Auth state change – navbar টগল
+    // Auth state change – navbar টগল (verified চেক ছাড়া)
     onAuthStateChanged(auth, (user) => {
-      if (user && user.emailVerified) {
+      if (user) {
         if (navLoggedOut) navLoggedOut.classList.add("hidden");
         if (navLoggedIn) navLoggedIn.classList.remove("hidden");
         const name = user.displayName || user.email;
@@ -884,11 +863,9 @@
     if (startTrialBtn) {
       startTrialBtn.addEventListener("click", () => {
         const user = auth.currentUser;
-        if (user && user.emailVerified) {
-          // Logged in + verified → সরাসরি dashboard
+        if (user) {
           window.location.href = "dashboard.html";
         } else {
-          // না থাকলে auth সেকশনে নেমে যাবে
           scrollToEl("auth");
         }
       });
@@ -906,7 +883,7 @@
       if (!btn) return;
       btn.addEventListener("click", () => {
         const user = auth.currentUser;
-        if (user && user.emailVerified) {
+        if (user) {
           window.location.href = "dashboard.html";
         } else {
           scrollToEl("auth");
@@ -916,4 +893,3 @@
   </script>
 </body>
 </html>
-
