@@ -88,6 +88,7 @@
       gap: 6px;
       background: transparent;
       color: #fff;
+      text-align: center;
     }
     .btn-outline {
       border-color: rgba(255,255,255,0.35);
@@ -135,7 +136,7 @@
     }
     .hero-subtitle {
       font-size: 0.98rem;
-      max-width: 520px;
+      max-width: 480px;
       color: rgba(255,255,255,0.8);
       margin-bottom: 24px;
     }
@@ -265,6 +266,17 @@
     .price-card.popular {
       border-color: #4eff9a;
       box-shadow: 0 18px 50px rgba(0,0,0,0.8);
+      position: relative;
+    }
+    .price-badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(76,255,167,0.18);
+      color: #a7ffcf;
     }
     .price-name { font-weight: 600; }
     .price-value {
@@ -275,6 +287,11 @@
       font-size: 0.8rem;
       font-weight: 400;
       color: rgba(255,255,255,0.7);
+    }
+    .price-old {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.6);
+      text-decoration: line-through;
     }
     .price-features {
       list-style: none;
@@ -440,7 +457,7 @@
       <nav class="nav-links">
         <a href="#features">Features</a>
         <a href="#pricing">Pricing</a>
-        <a href="#auth">Sign Up / Login</a>
+        <a href="#auth" id="nav-auth-link">Sign Up / Login</a>
       </nav>
 
       <!-- Logged-out buttons -->
@@ -463,20 +480,20 @@
     <section class="hero">
       <div>
         <div class="hero-tag">
-          🧠 AI video automation suite
+          🧠 Veo 3 video automation
         </div>
         <h1 class="hero-title">
-          Turn YouTube links & scripts<br />
-          into <span class="highlight">complete Veo 3 videos</span>
+          One-click <span class="highlight">AI videos</span><br/>
+          from YouTube links & scripts
         </h1>
         <p class="hero-subtitle">
-          Paste a YouTube link or a story and let Dream Automation handle the rest:
-          prompt analysis, Veo 3 shot generation, and stitching multiple clips into
-          polished long-form videos — all in a single workflow.
+          Dream Automation reads your YouTube videos and stories, auto-creates
+          Veo 3 prompts, generates cinematic shots, and merges them into
+          full long-form videos – with almost zero manual editing.
         </p>
         <div class="hero-actions">
-          <a href="#auth" class="btn btn-primary">🚀 Start free 2-day trial</a>
-          <a href="#pricing" class="btn btn-outline">💳 View pricing</a>
+          <a href="#auth" class="btn btn-primary">Start free trial</a>
+          <a href="#pricing" class="btn btn-outline">View pricing</a>
         </div>
         <div class="hero-meta">
           <span><strong>10,000+</strong> creators</span>
@@ -490,29 +507,29 @@
           <div class="dots">
             <div class="dot"></div><div class="dot"></div><div class="dot"></div>
           </div>
-          <span>Bulk Project Manager</span>
+          <span>Bulk Veo 3 Project Manager</span>
         </div>
         <div class="hero-screen">
-          <h3>Bulk Project Manager</h3>
+          <h3>Your automation queue</h3>
           <div class="list-header">
             <span>Project</span>
             <span>Status</span>
             <span>Output</span>
           </div>
           <div class="list-row">
-            <span>YouTube → Veo 3 Long Video</span>
+            <span>YouTube → Veo 3 long video</span>
             <span><span class="badge">Running</span></span>
-            <span>8 videos today</span>
+            <span>3 videos in progress</span>
           </div>
           <div class="list-row">
-            <span>Story → Scene-based Video</span>
+            <span>Story → cinematic scenes</span>
             <span>Completed</span>
-            <span>4 scripts</span>
+            <span>12 clips</span>
           </div>
           <div class="list-row">
-            <span>Short Clips → Long Edit</span>
+            <span>Shorts merge → long video</span>
             <span>Queued</span>
-            <span>5 projects</span>
+            <span>5 tasks</span>
           </div>
         </div>
       </div>
@@ -522,33 +539,33 @@
   <!-- Features -->
   <section id="features" class="container">
     <div class="section-title">
-      <h2>What you can do with Dream Automation</h2>
-      <p>One tool with all the premium AI video features you need.</p>
+      <h2>What you can build with Dream Automation</h2>
+      <p>A single app with all the premium AI video tools you need.</p>
     </div>
     <div class="features-grid">
       <div class="feature-card">
         <div class="feature-title">✔ YouTube Video → AI Video (One Click)</div>
-        <p>Turn any YouTube link into a complete Veo 3 video with one click.</p>
+        <p>Turn any YouTube link into a complete Veo 3-powered AI video in one click.</p>
       </div>
       <div class="feature-card">
         <div class="feature-title">✔ Text → Video (AI Video Generator)</div>
-        <p>Paste any text and get automatic visuals, scenes and final video.</p>
+        <p>Paste any text and let the AI generate visuals, scenes, and a full video.</p>
       </div>
       <div class="feature-card">
         <div class="feature-title">✔ Script → Long Video (One Click)</div>
-        <p>Drop in a script and let AI create storyboards, scenes and long-form video.</p>
+        <p>Drop in a script and get auto storyboard, scenes, and a full long-form video.</p>
       </div>
       <div class="feature-card">
         <div class="feature-title">✔ Video Prompt Generator</div>
-        <p>Analyze any video and auto-generate scene-by-scene Veo 3 prompts.</p>
+        <p>Analyze any video and get scene-by-scene Veo 3 prompts automatically.</p>
       </div>
       <div class="feature-card">
         <div class="feature-title">✔ AI Cinematic Scene Helper</div>
-        <p>Get smart cinematic shot suggestions tailored to your story.</p>
+        <p>Let AI plan the cinematic shots for you based on your story and idea.</p>
       </div>
       <div class="feature-card">
         <div class="feature-title">✔ Dedicated Support Team</div>
-        <p>24/7 dedicated support — plus a free Google Flow Ultra account in your first month.</p>
+        <p>24/7 support plus a free Google Flow Ultra account for your first month.</p>
       </div>
     </div>
   </section>
@@ -570,17 +587,18 @@
           <li>No credit card required</li>
         </ul>
         <a href="#auth" class="btn btn-outline" style="width:100%;justify-content:center;">
-          Start Free Trial
+          Start free trial
         </a>
       </div>
 
-      <!-- Monthly Pro -->
+      <!-- Monthly plan -->
       <div class="price-card popular">
-        <div class="price-name">Monthly Pro</div>
+        <div class="price-badge">Save 25% from $40</div>
+        <div class="price-name">Monthly Plan</div>
+        <div class="price-old">$40</div>
         <div class="price-value">$30 <span>/ month</span></div>
         <ul class="price-features">
-          <li>Unlimited video projects</li>
-          <li>Turn unlimited YouTube links into Veo 3 long videos</li>
+          <li>Monthly video creation with unlimited YouTube links into Veo 3 long videos</li>
           <li>Google Flow Ultra account included for the first month</li>
           <li>Monthly unlimited AI video generation</li>
           <li>4K export quality</li>
@@ -593,12 +611,12 @@
         </a>
       </div>
 
-      <!-- Lifetime -->
+      <!-- Lifetime plan -->
       <div class="price-card">
         <div class="price-name">Lifetime Access</div>
+        <div class="price-old">$300</div>
         <div class="price-value">$150 <span>/ one-time</span></div>
         <ul class="price-features">
-          <li>One-time payment, lifetime access</li>
           <li>Unlimited YouTube links into Veo 3 long videos</li>
           <li>Google Flow Ultra account included for the first month</li>
           <li>Unlimited AI video generation (with your own API keys)</li>
@@ -606,7 +624,7 @@
           <li>Built-in AI script generator</li>
           <li>VIP priority support</li>
           <li>Your own API keys required (full cost control)</li>
-          <li>API setup guide included</li>
+          <li>Full API setup guide included</li>
         </ul>
         <a href="#auth" class="btn btn-outline" style="width:100%;justify-content:center;">
           Get Lifetime Deal
@@ -619,11 +637,11 @@
   <section id="auth" class="container auth-section">
     <div class="auth-layout">
       <!-- Left text -->
-      <div class="auth-text">
+      <div class="auth-text" id="auth-text">
         <h2>Create your account and start automating</h2>
         <p>
-          Sign up for a free account, verify your email, then log in to access your
-          dashboard, download the software, and manage licenses for your Veo 3 projects.
+          Sign up for a free account, then log in to access your dashboard,
+          download the software, and manage licenses for your Veo 3 projects.
         </p>
         <ul class="auth-steps">
           <li>
@@ -632,17 +650,17 @@
           </li>
           <li>
             <span class="auth-step-badge">2</span>
-            <span>Check your inbox and verify your email</span>
+            <span>Verify your email address from the inbox link</span>
           </li>
           <li>
             <span class="auth-step-badge">3</span>
-            <span>Log in, open the dashboard and download the software</span>
+            <span>Log in, open the dashboard, and download the software</span>
           </li>
         </ul>
       </div>
 
       <!-- Right card -->
-      <div class="auth-card">
+      <div class="auth-card" id="auth-card">
         <div class="auth-tabs">
           <button class="auth-tab active" data-target="signup-form">Sign Up</button>
           <button class="auth-tab" data-target="login-form">Login</button>
@@ -662,7 +680,7 @@
               type="email"
               name="email"
               required
-              placeholder="example@gmail.com"
+              placeholder="you@example.com"
             />
           </div>
 
@@ -682,8 +700,8 @@
           </button>
 
           <p class="auth-note" id="signup-status">
-            Your account will be created in Firebase Authentication. You must verify
-            your email before you can log in.
+            Your account will be created in Firebase Authentication.
+            You must verify your email before you can log in.
           </p>
         </form>
 
@@ -772,9 +790,11 @@
     const navLoggedIn = document.getElementById("nav-logged-in");
     const navUsername = document.getElementById("nav-username");
     const authSection = document.getElementById("auth");
+    const navAuthLink = document.getElementById("nav-auth-link");
     const signupStatus = document.getElementById("signup-status");
+    const loginStatus = document.getElementById("login-status");
 
-    // SIGN UP handler + email verification
+    // SIGN UP handler (with email verification)
     const signupForm = document.getElementById("signup-form");
     if (signupForm) {
       signupForm.addEventListener("submit", async (e) => {
@@ -783,80 +803,81 @@
         const email = document.getElementById("su-email").value.trim();
         const password = document.getElementById("su-password").value;
 
+        signupStatus.textContent = "Creating account…";
+
         try {
           const cred = await createUserWithEmailAndPassword(auth, email, password);
+
           if (name) {
             await updateProfile(cred.user, { displayName: name });
           }
-          // send verification email
+
+          // Send verification email
           await sendEmailVerification(cred.user);
+
+          // Log out after sign up so they must verify first
           await signOut(auth);
 
-          if (signupStatus) {
-            signupStatus.textContent =
-              "✅ Sign up successful! We sent a verification link to your email. Please verify it, then log in.";
-          } else {
-            alert("Sign up successful! Please check your email and verify your account.");
-          }
-
+          signupStatus.textContent =
+            "✅ Account created! Please check your email and verify your address before logging in.";
           signupForm.reset();
-          // switch to Login tab automatically
-          const loginTab = document.querySelector('.auth-tab[data-target="login-form"]');
-          if (loginTab) loginTab.click();
         } catch (err) {
-          if (signupStatus) {
-            signupStatus.textContent = "❌ Sign up error: " + err.message;
-          } else {
-            alert("Sign up error: " + err.message);
-          }
+          signupStatus.textContent = "❌ Sign up error: " + err.message;
         }
       });
     }
 
-    // LOGIN handler (requires verified email)
+    // LOGIN handler (block if email not verified)
     const loginForm = document.getElementById("login-form");
-    const loginStatus = document.getElementById("login-status");
     if (loginForm) {
       loginForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         const email = document.getElementById("li-email").value.trim();
         const password = document.getElementById("li-password").value;
 
+        loginStatus.textContent = "Logging in…";
+
         try {
           const cred = await signInWithEmailAndPassword(auth, email, password);
 
           if (!cred.user.emailVerified) {
-            // re-send verification + sign out
+            // send a fresh verification email just in case
             await sendEmailVerification(cred.user);
             await signOut(auth);
-            if (loginStatus) {
-              loginStatus.textContent =
-                "⚠️ Please verify your email first. We just re-sent the verification link to your inbox.";
-            }
+            loginStatus.textContent =
+              "📩 Please verify your email first. A verification link has been sent to your inbox.";
             return;
           }
 
-          // Verified → go to dashboard
+          // Email verified, go to dashboard
           window.location.href = "dashboard.html";
         } catch (err) {
-          if (loginStatus) loginStatus.textContent = "❌ Login error: " + err.message;
+          loginStatus.textContent = "❌ Login error: " + err.message;
         }
       });
     }
 
-    // Auth state change – toggle navbar + hide signup section when logged in
+    // Auth state change – navbar toggle + hide signup when logged in
     onAuthStateChanged(auth, (user) => {
       if (user && user.emailVerified) {
         if (navLoggedOut) navLoggedOut.classList.add("hidden");
         if (navLoggedIn) navLoggedIn.classList.remove("hidden");
         const name = user.displayName || user.email;
         if (navUsername) navUsername.textContent = "Welcome, " + name;
-        // hide sign up/login section completely
+
+        // Hide auth section when logged in
         if (authSection) authSection.classList.add("hidden");
+
+        // Nav link can point directly to dashboard when logged in
+        if (navAuthLink) navAuthLink.href = "dashboard.html";
       } else {
         if (navLoggedOut) navLoggedOut.classList.remove("hidden");
         if (navLoggedIn) navLoggedIn.classList.add("hidden");
+
+        // Show auth section when logged out
         if (authSection) authSection.classList.remove("hidden");
+
+        if (navAuthLink) navAuthLink.href = "#auth";
       }
     });
 
