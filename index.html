@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dream Automation – Veo 3 Video Automation</title>
+  <title>Dream Automation - প্রফেশনাল সফটওয়্যার সল্যুশন</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -88,7 +88,6 @@
       gap: 6px;
       background: transparent;
       color: #fff;
-      text-align: center;
     }
     .btn-outline {
       border-color: rgba(255,255,255,0.35);
@@ -102,6 +101,18 @@
     .btn-primary:hover {
       transform: translateY(-1px);
       box-shadow: 0 18px 45px rgba(0,0,0,0.65);
+    }
+
+    /* নতুন ghost / secondary button (View pricing এর জন্য) */
+    .btn-ghost {
+      border-color: rgba(255,255,255,0.55);
+      background: rgba(10,12,40,0.9);
+      color: #e5e7eb;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+    }
+    .btn-ghost:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 45px rgba(0,0,0,0.7);
     }
 
     /* Hero */
@@ -146,6 +157,12 @@
       gap: 12px;
       margin-bottom: 20px;
     }
+    /* hero বাটন একটু বড় */
+    .hero-actions .btn {
+      padding: 10px 24px;
+      font-size: 0.95rem;
+    }
+
     .hero-meta {
       display: flex;
       flex-wrap: wrap;
@@ -266,17 +283,6 @@
     .price-card.popular {
       border-color: #4eff9a;
       box-shadow: 0 18px 50px rgba(0,0,0,0.8);
-      position: relative;
-    }
-    .price-badge {
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      font-size: 0.7rem;
-      padding: 3px 8px;
-      border-radius: 999px;
-      background: rgba(76,255,167,0.18);
-      color: #a7ffcf;
     }
     .price-name { font-weight: 600; }
     .price-value {
@@ -457,13 +463,13 @@
       <nav class="nav-links">
         <a href="#features">Features</a>
         <a href="#pricing">Pricing</a>
-        <a href="#auth" id="nav-auth-link">Sign Up / Login</a>
+        <a href="#auth">Sign Up / Login</a>
       </nav>
 
       <!-- Logged-out buttons -->
       <div class="nav-actions" id="nav-logged-out">
         <a href="#auth" class="btn btn-outline">Log in</a>
-        <a href="#auth" class="btn btn-primary">Start free trial</a>
+        <a href="#auth" class="btn btn-primary">Try it Free</a>
       </div>
 
       <!-- Logged-in user menu -->
@@ -480,25 +486,29 @@
     <section class="hero">
       <div>
         <div class="hero-tag">
-          🧠 Veo 3 video automation
+          
         </div>
         <h1 class="hero-title">
-          One-click <span class="highlight">AI videos</span><br/>
-          from YouTube links & scripts
-        </h1>
-        <p class="hero-subtitle">
-          Dream Automation reads your YouTube videos and stories, auto-creates
-          Veo 3 prompts, generates cinematic shots, and merges them into
-          full long-form videos – with almost zero manual editing.
-        </p>
+  One-click <span class="highlight">AI videos</span><br />
+  from YouTube links &amp; scripts
+</h1>
+<p class="hero-subtitle">
+  SceneFlow Studio আপনার ইউটিউব ভিডিও এবং স্ক্রিপ্ট থেকে Veo 3 প্রম্পট স্বয়ংক্রিয়ভাবে তৈরি করে,
+  Flow দিয়ে সিনেমাটিক শট জেনারেট করে এবং সব শট একত্র করে ফাইনাল লং ভিডিও বানিয়ে দেয় – 
+  প্রায় কোন ম্যানুয়াল কাজ ছাড়াই।
+</p>
+
+
+        <!-- নতুন CTA বাটনগুলো -->
         <div class="hero-actions">
-          <a href="#auth" class="btn btn-primary">Start free trial</a>
-          <a href="#pricing" class="btn btn-outline">View pricing</a>
+          <button class="btn btn-primary" id="btn-start-trial">Start free trial</button>
+          <button class="btn btn-ghost" id="btn-view-pricing">View pricing</button>
         </div>
+
         <div class="hero-meta">
-          <span><strong>10,000+</strong> creators</span>
-          <span><strong>4.8★</strong> average rating</span>
-          <span><strong>24/7</strong> support</span>
+          <span><strong></strong> </span>
+          <span><strong></strong> </span>
+          <span><strong>২৪/৭</strong> সাপোর্ট</span>
         </div>
       </div>
 
@@ -507,65 +517,65 @@
           <div class="dots">
             <div class="dot"></div><div class="dot"></div><div class="dot"></div>
           </div>
-          <span>Bulk Veo 3 Project Manager</span>
+          <span>Bulk Project Manager</span>
         </div>
         <div class="hero-screen">
-          <h3>Your automation queue</h3>
+          <h3>Bulk Project Manager</h3>
           <div class="list-header">
             <span>Project</span>
             <span>Status</span>
             <span>Output</span>
           </div>
           <div class="list-row">
-            <span>YouTube → Veo 3 long video</span>
+            <span>YouTube video analysis</span>
             <span><span class="badge">Running</span></span>
-            <span>3 videos in progress</span>
+            <span>100 scene_prompt</span>
           </div>
           <div class="list-row">
-            <span>Story → cinematic scenes</span>
-            <span>Completed</span>
-            <span>12 clips</span>
+            <span> Generator video Flow </span>
+             <span>Running</span>
+            <span>100 Video clips </span>
           </div>
           <div class="list-row">
-            <span>Shorts merge → long video</span>
-            <span>Queued</span>
-            <span>5 tasks</span>
+            <span>Flow 100 Video clips </span>
+             <span>Marge</span>
+            <span>1 Video Size 13 Minute Ready</span>
           </div>
         </div>
       </div>
     </section>
   </main>
 
-  <!-- Features -->
+  <!-- Features (আগের মতোই) -->
   <section id="features" class="container">
     <div class="section-title">
-      <h2>What you can build with Dream Automation</h2>
-      <p>A single app with all the premium AI video tools you need.</p>
+      <h2>কেন ব্যবহার করবেন?</h2>
+      <p>একটি সফটওয়্যারে সব প্রিমিয়াম AI ভিডিও ফিচার একসাথে।</p>
     </div>
     <div class="features-grid">
       <div class="feature-card">
         <div class="feature-title">✔ YouTube Video → AI Video (One Click)</div>
-        <p>Turn any YouTube link into a complete Veo 3-powered AI video in one click.</p>
+        <p>এক ক্লিকে ইউটিউব লিংক থেকে সম্পূর্ণ AI ভিডিও তৈরি।</p>
       </div>
       <div class="feature-card">
         <div class="feature-title">✔ Text → Video (AI Video Generator)</div>
-        <p>Paste any text and let the AI generate visuals, scenes, and a full video.</p>
+        <p>যেকোনো টেক্সট দিলেই অটো ভিজ্যুয়াল + ভিডিও তৈরি হয়।</p>
       </div>
       <div class="feature-card">
         <div class="feature-title">✔ Script → Long Video (One Click)</div>
-        <p>Drop in a script and get auto storyboard, scenes, and a full long-form video.</p>
+        <p>স্ক্রিপ্ট দিন → AI অটো স্টোরিবোর্ড + সিন + লং ভিডিও তৈরি।</p>
       </div>
       <div class="feature-card">
         <div class="feature-title">✔ Video Prompt Generator</div>
-        <p>Analyze any video and get scene-by-scene Veo 3 prompts automatically.</p>
+        <p>যেকোনো ভিডিও থেকে scene-by-scene প্রম্পট অটো জেনারেট।</p>
       </div>
       <div class="feature-card">
-        <div class="feature-title">✔ AI Cinematic Scene Helper</div>
-        <p>Let AI plan the cinematic shots for you based on your story and idea.</p>
+        <div class="feature-title">✔ AI Cinematic Scene</div>
+        <p>ব্যবহার অনুযায়ী AI নিজে থেকে সিনেমাটিক শট সাজিয়ে দেয়।</p>
       </div>
       <div class="feature-card">
         <div class="feature-title">✔ Dedicated Support Team</div>
-        <p>24/7 support plus a free Google Flow Ultra account for your first month.</p>
+        <p>২৪/৭ ডেডিকেটেড সাপোর্ট টিম – যেকোনো সমস্যায় সাথে সাথে সাহায্য।</p>
       </div>
     </div>
   </section>
@@ -573,62 +583,56 @@
   <!-- Pricing -->
   <section id="pricing" class="container">
     <div class="section-title">
-      <h2>Pricing plans</h2>
-      <p>Start with a free 2-day trial, then upgrade to Monthly or Lifetime anytime.</p>
+      <h2>প্রাইসিং প্ল্যান</h2>
+      <p>ফ্রি ট্রায়াল দিয়ে শুরু করে পরে প্রো বা লাইফটাইম প্ল্যানে আপগ্রেড করুন।</p>
     </div>
     <div class="pricing-grid">
-      <!-- Free trial -->
       <div class="price-card">
-        <div class="price-name">Free 2-Day Trial</div>
-        <div class="price-value">$0 <span>/ 2 days</span></div>
+        <div class="price-name">Free Trial</div>
+        <div class="price-value">$0 <span>/ ২ days</span></div>
         <ul class="price-features">
           <li>2-day full access to Dream Automation</li>
           <li>Test all Veo 3 & AI video tools</li>
           <li>No credit card required</li>
         </ul>
-        <a href="#auth" class="btn btn-outline" style="width:100%;justify-content:center;">
-          Start free trial
-        </a>
+        <button class="btn btn-outline" style="width:100%;justify-content:center;" id="price-free-btn">
+          Start Free Trial
+        </button>
       </div>
 
-      <!-- Monthly plan -->
       <div class="price-card popular">
-        <div class="price-badge">Save 25% from $40</div>
         <div class="price-name">Monthly Plan</div>
-        <div class="price-old">$40</div>
         <div class="price-value">$30 <span>/ month</span></div>
         <ul class="price-features">
-          <li>Monthly video creation with unlimited YouTube links into Veo 3 long videos</li>
+          <li>Monthly video creation with unlimited YouTube → Veo 3 long videos</li>
           <li>Google Flow Ultra account included for the first month</li>
-          <li>Monthly unlimited AI video generation</li>
+          <li>Monthly unlimited video generation</li>
           <li>4K export quality</li>
           <li>Built-in AI script generator</li>
           <li>Standard email & chat support</li>
           <li>API setup guide included</li>
         </ul>
-        <a href="#auth" class="btn btn-primary" style="width:100%;justify-content:center;">
+        <button class="btn btn-primary" style="width:100%;justify-content:center;" id="price-monthly-btn">
           Start Monthly Plan
-        </a>
+        </button>
       </div>
 
-      <!-- Lifetime plan -->
       <div class="price-card">
         <div class="price-name">Lifetime Access</div>
-        <div class="price-old">$300</div>
         <div class="price-value">$150 <span>/ one-time</span></div>
         <ul class="price-features">
-          <li>Unlimited YouTube links into Veo 3 long videos</li>
+          <li>Unlimited YouTube → Veo 3 long videos</li>
           <li>Google Flow Ultra account included for the first month</li>
-          <li>Unlimited AI video generation (with your own API keys)</li>
+          <li>Unlimited video generation (with your own API keys)</li>
           <li>4K export quality</li>
-          <li>Built-in AI script generator</li>
-          <li>VIP priority support</li>
-          <li>Your own API keys required (full cost control)</li>
-          <li>Full API setup guide included</li>
+          <li>AI script generator</li>
+          <li>VIP support</li>
+          <li>Your own API keys required</li>
+          <li>API setup guide included</li>
         </ul>
-        <a href="#auth" class="btn btn-outline" style="width:100%;justify-content:center;">
+        <button class="btn btn-outline" style="width:100%;justify-content:center;" id="price-lifetime-btn">
           Get Lifetime Deal
-        </a>
+        </button>
       </div>
     </div>
   </section>
@@ -637,30 +641,30 @@
   <section id="auth" class="container auth-section">
     <div class="auth-layout">
       <!-- Left text -->
-      <div class="auth-text" id="auth-text">
-        <h2>Create your account and start automating</h2>
+      <div class="auth-text">
+        <h2>অ্যাকাউন্ট খুলে Dream Automation ব্যবহার করুন</h2>
         <p>
-          Sign up for a free account, then log in to access your dashboard,
-          download the software, and manage licenses for your Veo 3 projects.
+          ফ্রি সাইন আপ করুন, তারপর লগ ইন করে আপনার সফটওয়্যার ড্যাশবোর্ডে প্রবেশ করুন।
+          ইমেইল + পাসওয়ার্ড দিয়েই সবকিছু ম্যানেজ করবেন।
         </p>
         <ul class="auth-steps">
           <li>
             <span class="auth-step-badge">1</span>
-            <span>Fill in the Sign Up form</span>
+            <span>Sign Up ফর্ম পূরণ করুন</span>
           </li>
           <li>
             <span class="auth-step-badge">2</span>
-            <span>Verify your email address from the inbox link</span>
+            <span>ইনবক্সে গিয়ে ইমেইল verify করুন</span>
           </li>
           <li>
             <span class="auth-step-badge">3</span>
-            <span>Log in, open the dashboard, and download the software</span>
+            <span>Dashboard (dashboard.html) থেকে software download করুন</span>
           </li>
         </ul>
       </div>
 
       <!-- Right card -->
-      <div class="auth-card" id="auth-card">
+      <div class="auth-card">
         <div class="auth-tabs">
           <button class="auth-tab active" data-target="signup-form">Sign Up</button>
           <button class="auth-tab" data-target="login-form">Login</button>
@@ -680,7 +684,7 @@
               type="email"
               name="email"
               required
-              placeholder="you@example.com"
+              placeholder="example@gmail.com"
             />
           </div>
 
@@ -699,9 +703,10 @@
             🚀 Sign Up
           </button>
 
-          <p class="auth-note" id="signup-status">
-            Your account will be created in Firebase Authentication.
-            You must verify your email before you can log in.
+          <p class="auth-note">
+            Your account will be created in Firebase Authentication. Check your
+            inbox to verify your email, then log in with the same email &
+            password.
           </p>
         </form>
 
@@ -739,149 +744,179 @@
 
   <!-- Year + Tabs + Firebase Auth -->
   <script type="module">
-  // Year
-  const yearSpan = document.getElementById("year");
-  if (yearSpan) {
-    yearSpan.textContent = new Date().getFullYear();
-  }
-
-  // Auth tabs toggle
-  const tabs = document.querySelectorAll(".auth-tab");
-  const forms = document.querySelectorAll(".auth-form");
-  tabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      tabs.forEach((t) => t.classList.remove("active"));
-      forms.forEach((f) => f.classList.remove("active"));
-      tab.classList.add("active");
-      const targetId = tab.getAttribute("data-target");
-      const form = document.getElementById(targetId);
-      if (form) form.classList.add("active");
-    });
-  });
-
-  // ---------- Firebase Setup ----------
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
-  import {
-    getAuth,
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    signOut,
-    onAuthStateChanged,
-    updateProfile,
-    sendEmailVerification,
-  } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyA_lZmfn4T31B6jm1dB0UywR7OEgYIPlo0",
-    authDomain: "sceneflow-studio.firebaseapp.com",
-    projectId: "sceneflow-studio",
-    storageBucket: "sceneflow-studio.firebasestorage.app",
-    messagingSenderId: "961327164320",
-    appId: "1:961327164320:web:7ffb160db2529f4c1412c5",
-    measurementId: "G-56962H6FQ4",
-  };
-
-  const app = initializeApp(firebaseConfig);
-  getAnalytics(app);
-  const auth = getAuth(app);
-
-  const navLoggedOut = document.getElementById("nav-logged-out");
-  const navLoggedIn = document.getElementById("nav-logged-in");
-  const navUsername = document.getElementById("nav-username");
-  const authSection = document.getElementById("auth");
-  const navAuthLink = document.getElementById("nav-auth-link");
-  const signupStatus = document.getElementById("signup-status");
-  const loginStatus = document.getElementById("login-status");
-
-  // ========== SIGN UP (send verify mail, but login allowed without verify) ==========
-  const signupForm = document.getElementById("signup-form");
-  if (signupForm) {
-    signupForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const name = document.getElementById("su-name").value.trim();
-      const email = document.getElementById("su-email").value.trim();
-      const password = document.getElementById("su-password").value;
-
-      signupStatus.textContent = "Creating account…";
-
-      try {
-        const cred = await createUserWithEmailAndPassword(auth, email, password);
-
-        if (name) {
-          await updateProfile(cred.user, { displayName: name });
-        }
-
-        // verification mail (optional – শুধু info)
-        try {
-          await sendEmailVerification(cred.user);
-        } catch (e) {
-          console.warn("Verification email error:", e);
-        }
-
-        signupStatus.textContent =
-          "✅ Account created! We sent a verification email (optional). You can now log in with your email and password.";
-        signupForm.reset();
-      } catch (err) {
-        signupStatus.textContent = "❌ Sign up error: " + err.message;
-      }
-    });
-  }
-
-  // ========== LOGIN (no emailVerified check) ==========
-  const loginForm = document.getElementById("login-form");
-  if (loginForm) {
-    loginForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const email = document.getElementById("li-email").value.trim();
-      const password = document.getElementById("li-password").value;
-
-      loginStatus.textContent = "Logging in…";
-
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-        // success -> dashboard
-        window.location.href = "dashboard.html";
-      } catch (err) {
-        if (err.code === "auth/too-many-requests") {
-          loginStatus.textContent =
-            "⚠️ Too many attempts. Please wait a few minutes and try again.";
-        } else {
-          loginStatus.textContent = "❌ Login error: " + err.message;
-        }
-      }
-    });
-  }
-
-  // ========== Auth state (navbar toggle + hide auth section when logged in) ==========
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      if (navLoggedOut) navLoggedOut.classList.add("hidden");
-      if (navLoggedIn) navLoggedIn.classList.remove("hidden");
-      const name = user.displayName || user.email;
-      if (navUsername) navUsername.textContent = "Welcome, " + name;
-
-      // logged-in হলে সাইন আপ/লগিন সেকশন লুকানো
-      if (authSection) authSection.classList.add("hidden");
-      if (navAuthLink) navAuthLink.href = "dashboard.html";
-    } else {
-      if (navLoggedOut) navLoggedOut.classList.remove("hidden");
-      if (navLoggedIn) navLoggedIn.classList.add("hidden");
-
-      if (authSection) authSection.classList.remove("hidden");
-      if (navAuthLink) navAuthLink.href = "#auth";
+    // Year
+    const yearSpan = document.getElementById("year");
+    if (yearSpan) {
+      yearSpan.textContent = new Date().getFullYear();
     }
-  });
 
-  // Logout
-  const logoutBtn = document.getElementById("logout-btn");
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", async () => {
-      await signOut(auth);
-      alert("🔓 Logged out");
+    // Auth tabs toggle
+    const tabs = document.querySelectorAll(".auth-tab");
+    const forms = document.querySelectorAll(".auth-form");
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        tabs.forEach((t) => t.classList.remove("active"));
+        forms.forEach((f) => f.classList.remove("active"));
+        tab.classList.add("active");
+        const targetId = tab.getAttribute("data-target");
+        const form = document.getElementById(targetId);
+        if (form) form.classList.add("active");
+      });
     });
-  }
-</script>
 
+    // ---------- Firebase Setup ----------
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      signOut,
+      onAuthStateChanged,
+      updateProfile,
+      sendEmailVerification
+    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA_lZmfn4T31B6jm1dB0UywR7OEgYIPlo0",
+      authDomain: "sceneflow-studio.firebaseapp.com",
+      projectId: "sceneflow-studio",
+      storageBucket: "sceneflow-studio.firebasestorage.app",
+      messagingSenderId: "961327164320",
+      appId: "1:961327164320:web:7ffb160db2529f4c1412c5",
+      measurementId: "G-56962H6FQ4"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    getAnalytics(app);
+    const auth = getAuth(app);
+
+    const navLoggedOut = document.getElementById("nav-logged-out");
+    const navLoggedIn = document.getElementById("nav-logged-in");
+    const navUsername = document.getElementById("nav-username");
+    const authSection = document.getElementById("auth");
+
+    // SIGN UP handler + email verification
+    const signupForm = document.getElementById("signup-form");
+    if (signupForm) {
+      signupForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const name = document.getElementById("su-name").value;
+        const email = document.getElementById("su-email").value;
+        const password = document.getElementById("su-password").value;
+
+        try {
+          const cred = await createUserWithEmailAndPassword(auth, email, password);
+          if (name) {
+            await updateProfile(cred.user, { displayName: name });
+          }
+          await sendEmailVerification(cred.user);
+          alert(
+            "✅ Sign up successful! We’ve sent a verification link to your email. Please verify, then log in."
+          );
+          signupForm.reset();
+          // ট্যাব বদলে Login দেখাই
+          const loginTab = document.querySelector('.auth-tab[data-target="login-form"]');
+          if (loginTab) loginTab.click();
+        } catch (err) {
+          alert("❌ Sign up error: " + err.message);
+        }
+      });
+    }
+
+    // LOGIN handler (only if email verified)
+    const loginForm = document.getElementById("login-form");
+    const loginStatus = document.getElementById("login-status");
+    if (loginForm) {
+      loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("li-email").value;
+        const password = document.getElementById("li-password").value;
+
+        try {
+          const cred = await signInWithEmailAndPassword(auth, email, password);
+          const user = cred.user;
+
+          if (!user.emailVerified) {
+            await signOut(auth);
+            if (loginStatus) {
+              loginStatus.textContent =
+                "⚠ Please verify your email first. Check your inbox for the verification link.";
+            }
+            return;
+          }
+
+          // সব ঠিক থাকলে Dashboard এ নাও
+          window.location.href = "dashboard.html";
+        } catch (err) {
+          if (loginStatus) loginStatus.textContent = "❌ Login error: " + err.message;
+        }
+      });
+    }
+
+    // Auth state change – navbar টগল
+    onAuthStateChanged(auth, (user) => {
+      if (user && user.emailVerified) {
+        if (navLoggedOut) navLoggedOut.classList.add("hidden");
+        if (navLoggedIn) navLoggedIn.classList.remove("hidden");
+        const name = user.displayName || user.email;
+        if (navUsername) navUsername.textContent = "Welcome, " + name;
+      } else {
+        if (navLoggedOut) navLoggedOut.classList.remove("hidden");
+        if (navLoggedIn) navLoggedIn.classList.add("hidden");
+      }
+    });
+
+    // Logout
+    const logoutBtn = document.getElementById("logout-btn");
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", async () => {
+        await signOut(auth);
+        alert("🔓 Logged out");
+      });
+    }
+
+    // ---- Hero buttons ----
+    const startTrialBtn = document.getElementById("btn-start-trial");
+    const viewPricingBtn = document.getElementById("btn-view-pricing");
+
+    function scrollToEl(id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    }
+
+    if (startTrialBtn) {
+      startTrialBtn.addEventListener("click", () => {
+        const user = auth.currentUser;
+        if (user && user.emailVerified) {
+          // Logged in + verified → সরাসরি dashboard
+          window.location.href = "dashboard.html";
+        } else {
+          // না থাকলে auth সেকশনে নেমে যাবে
+          scrollToEl("auth");
+        }
+      });
+    }
+
+    if (viewPricingBtn) {
+      viewPricingBtn.addEventListener("click", () => {
+        scrollToEl("pricing");
+      });
+    }
+
+    // Pricing section-এর বোতামগুলোতেও একই behaviour
+    ["price-free-btn", "price-monthly-btn", "price-lifetime-btn"].forEach((id) => {
+      const btn = document.getElementById(id);
+      if (!btn) return;
+      btn.addEventListener("click", () => {
+        const user = auth.currentUser;
+        if (user && user.emailVerified) {
+          window.location.href = "dashboard.html";
+        } else {
+          scrollToEl("auth");
+        }
+      });
+    });
+  </script>
 </body>
 </html>
