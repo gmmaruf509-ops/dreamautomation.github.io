@@ -739,156 +739,149 @@
 
   <!-- Year + Tabs + Firebase Auth -->
   <script type="module">
-    // Year
-    const yearSpan = document.getElementById("year");
-    if (yearSpan) {
-      yearSpan.textContent = new Date().getFullYear();
-    }
+  // Year
+  const yearSpan = document.getElementById("year");
+  if (yearSpan) {
+    yearSpan.textContent = new Date().getFullYear();
+  }
 
-    // Auth tabs toggle
-    const tabs = document.querySelectorAll(".auth-tab");
-    const forms = document.querySelectorAll(".auth-form");
-    tabs.forEach((tab) => {
-      tab.addEventListener("click", () => {
-        tabs.forEach((t) => t.classList.remove("active"));
-        forms.forEach((f) => f.classList.remove("active"));
-        tab.classList.add("active");
-        const targetId = tab.getAttribute("data-target");
-        const form = document.getElementById(targetId);
-        if (form) form.classList.add("active");
-      });
+  // Auth tabs toggle
+  const tabs = document.querySelectorAll(".auth-tab");
+  const forms = document.querySelectorAll(".auth-form");
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      tabs.forEach((t) => t.classList.remove("active"));
+      forms.forEach((f) => f.classList.remove("active"));
+      tab.classList.add("active");
+      const targetId = tab.getAttribute("data-target");
+      const form = document.getElementById(targetId);
+      if (form) form.classList.add("active");
     });
+  });
 
-    // ---------- Firebase Setup ----------
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
-    import {
-      getAuth,
-      createUserWithEmailAndPassword,
-      signInWithEmailAndPassword,
-      signOut,
-      onAuthStateChanged,
-      updateProfile,
-      sendEmailVerification
-    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+  // ---------- Firebase Setup ----------
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
+  import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged,
+    updateProfile,
+    sendEmailVerification,
+  } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyA_lZmfn4T31B6jm1dB0UywR7OEgYIPlo0",
-      authDomain: "sceneflow-studio.firebaseapp.com",
-      projectId: "sceneflow-studio",
-      storageBucket: "sceneflow-studio.firebasestorage.app",
-      messagingSenderId: "961327164320",
-      appId: "1:961327164320:web:7ffb160db2529f4c1412c5",
-      measurementId: "G-56962H6FQ4"
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyA_lZmfn4T31B6jm1dB0UywR7OEgYIPlo0",
+    authDomain: "sceneflow-studio.firebaseapp.com",
+    projectId: "sceneflow-studio",
+    storageBucket: "sceneflow-studio.firebasestorage.app",
+    messagingSenderId: "961327164320",
+    appId: "1:961327164320:web:7ffb160db2529f4c1412c5",
+    measurementId: "G-56962H6FQ4",
+  };
 
-    const app = initializeApp(firebaseConfig);
-    getAnalytics(app);
-    const auth = getAuth(app);
+  const app = initializeApp(firebaseConfig);
+  getAnalytics(app);
+  const auth = getAuth(app);
 
-    const navLoggedOut = document.getElementById("nav-logged-out");
-    const navLoggedIn = document.getElementById("nav-logged-in");
-    const navUsername = document.getElementById("nav-username");
-    const authSection = document.getElementById("auth");
-    const navAuthLink = document.getElementById("nav-auth-link");
-    const signupStatus = document.getElementById("signup-status");
-    const loginStatus = document.getElementById("login-status");
+  const navLoggedOut = document.getElementById("nav-logged-out");
+  const navLoggedIn = document.getElementById("nav-logged-in");
+  const navUsername = document.getElementById("nav-username");
+  const authSection = document.getElementById("auth");
+  const navAuthLink = document.getElementById("nav-auth-link");
+  const signupStatus = document.getElementById("signup-status");
+  const loginStatus = document.getElementById("login-status");
 
-    // SIGN UP handler (with email verification)
-    const signupForm = document.getElementById("signup-form");
-    if (signupForm) {
-      signupForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const name = document.getElementById("su-name").value.trim();
-        const email = document.getElementById("su-email").value.trim();
-        const password = document.getElementById("su-password").value;
+  // ========== SIGN UP (send verify mail, but login allowed without verify) ==========
+  const signupForm = document.getElementById("signup-form");
+  if (signupForm) {
+    signupForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = document.getElementById("su-name").value.trim();
+      const email = document.getElementById("su-email").value.trim();
+      const password = document.getElementById("su-password").value;
 
-        signupStatus.textContent = "Creating account…";
+      signupStatus.textContent = "Creating account…";
 
+      try {
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+
+        if (name) {
+          await updateProfile(cred.user, { displayName: name });
+        }
+
+        // verification mail (optional – শুধু info)
         try {
-          const cred = await createUserWithEmailAndPassword(auth, email, password);
-
-          if (name) {
-            await updateProfile(cred.user, { displayName: name });
-          }
-
-          // Send verification email
           await sendEmailVerification(cred.user);
-
-          // Log out after sign up so they must verify first
-          await signOut(auth);
-
-          signupStatus.textContent =
-            "✅ Account created! Please check your email and verify your address before logging in.";
-          signupForm.reset();
-        } catch (err) {
-          signupStatus.textContent = "❌ Sign up error: " + err.message;
+        } catch (e) {
+          console.warn("Verification email error:", e);
         }
-      });
-    }
 
-    // LOGIN handler (block if email not verified)
-    const loginForm = document.getElementById("login-form");
-    if (loginForm) {
-      loginForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const email = document.getElementById("li-email").value.trim();
-        const password = document.getElementById("li-password").value;
-
-        loginStatus.textContent = "Logging in…";
-
-        try {
-          const cred = await signInWithEmailAndPassword(auth, email, password);
-
-          if (!cred.user.emailVerified) {
-            // send a fresh verification email just in case
-            await sendEmailVerification(cred.user);
-            await signOut(auth);
-            loginStatus.textContent =
-              "📩 Please verify your email first. A verification link has been sent to your inbox.";
-            return;
-          }
-
-          // Email verified, go to dashboard
-          window.location.href = "dashboard.html";
-        } catch (err) {
-          loginStatus.textContent = "❌ Login error: " + err.message;
-        }
-      });
-    }
-
-    // Auth state change – navbar toggle + hide signup when logged in
-    onAuthStateChanged(auth, (user) => {
-      if (user && user.emailVerified) {
-        if (navLoggedOut) navLoggedOut.classList.add("hidden");
-        if (navLoggedIn) navLoggedIn.classList.remove("hidden");
-        const name = user.displayName || user.email;
-        if (navUsername) navUsername.textContent = "Welcome, " + name;
-
-        // Hide auth section when logged in
-        if (authSection) authSection.classList.add("hidden");
-
-        // Nav link can point directly to dashboard when logged in
-        if (navAuthLink) navAuthLink.href = "dashboard.html";
-      } else {
-        if (navLoggedOut) navLoggedOut.classList.remove("hidden");
-        if (navLoggedIn) navLoggedIn.classList.add("hidden");
-
-        // Show auth section when logged out
-        if (authSection) authSection.classList.remove("hidden");
-
-        if (navAuthLink) navAuthLink.href = "#auth";
+        signupStatus.textContent =
+          "✅ Account created! We sent a verification email (optional). You can now log in with your email and password.";
+        signupForm.reset();
+      } catch (err) {
+        signupStatus.textContent = "❌ Sign up error: " + err.message;
       }
     });
+  }
 
-    // Logout
-    const logoutBtn = document.getElementById("logout-btn");
-    if (logoutBtn) {
-      logoutBtn.addEventListener("click", async () => {
-        await signOut(auth);
-        alert("🔓 Logged out");
-      });
+  // ========== LOGIN (no emailVerified check) ==========
+  const loginForm = document.getElementById("login-form");
+  if (loginForm) {
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("li-email").value.trim();
+      const password = document.getElementById("li-password").value;
+
+      loginStatus.textContent = "Logging in…";
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        // success -> dashboard
+        window.location.href = "dashboard.html";
+      } catch (err) {
+        if (err.code === "auth/too-many-requests") {
+          loginStatus.textContent =
+            "⚠️ Too many attempts. Please wait a few minutes and try again.";
+        } else {
+          loginStatus.textContent = "❌ Login error: " + err.message;
+        }
+      }
+    });
+  }
+
+  // ========== Auth state (navbar toggle + hide auth section when logged in) ==========
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      if (navLoggedOut) navLoggedOut.classList.add("hidden");
+      if (navLoggedIn) navLoggedIn.classList.remove("hidden");
+      const name = user.displayName || user.email;
+      if (navUsername) navUsername.textContent = "Welcome, " + name;
+
+      // logged-in হলে সাইন আপ/লগিন সেকশন লুকানো
+      if (authSection) authSection.classList.add("hidden");
+      if (navAuthLink) navAuthLink.href = "dashboard.html";
+    } else {
+      if (navLoggedOut) navLoggedOut.classList.remove("hidden");
+      if (navLoggedIn) navLoggedIn.classList.add("hidden");
+
+      if (authSection) authSection.classList.remove("hidden");
+      if (navAuthLink) navAuthLink.href = "#auth";
     }
-  </script>
+  });
+
+  // Logout
+  const logoutBtn = document.getElementById("logout-btn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      alert("🔓 Logged out");
+    });
+  }
+</script>
+
 </body>
 </html>
