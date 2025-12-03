@@ -832,18 +832,34 @@ const loginTab  = document.querySelector('.auth-tab[data-target="login-form"]');
       });
     }
 
-    // Auth state change – navbar টগল (verified চেক ছাড়া)
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        if (navLoggedOut) navLoggedOut.classList.add("hidden");
-        if (navLoggedIn) navLoggedIn.classList.remove("hidden");
-        const name = user.displayName || user.email;
-        if (navUsername) navUsername.textContent = "Welcome, " + name;
-      } else {
-        if (navLoggedOut) navLoggedOut.classList.remove("hidden");
-        if (navLoggedIn) navLoggedIn.classList.add("hidden");
-      }
-    });
+    // Auth state change – navbar টগল + লগইন থাকলে Sign Up লুকিয়ে দাও
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // navbar
+    if (navLoggedOut) navLoggedOut.classList.add("hidden");
+    if (navLoggedIn) navLoggedIn.classList.remove("hidden");
+    const name = user.displayName || user.email;
+    if (navUsername) navUsername.textContent = "Welcome, " + name;
+
+    // লগইন থাকলে: Sign Up ট্যাব/ফর্ম লুকাও, Login দেখাও
+    if (signupTab) signupTab.style.display = "none";
+    if (signupForm) signupForm.classList.remove("active");
+
+    if (loginTab) loginTab.style.display = "";
+    if (loginTab) loginTab.classList.add("active");
+    if (loginForm) loginForm.classList.add("active");
+  } else {
+    // logout হলে: আবার আগের মত Sign Up ডিফল্ট দেখাও
+    if (navLoggedOut) navLoggedOut.classList.remove("hidden");
+    if (navLoggedIn) navLoggedIn.classList.add("hidden");
+
+    if (signupTab) signupTab.style.display = "";
+    if (loginTab)  loginTab.classList.remove("active");
+    if (loginForm) loginForm.classList.remove("active");
+    if (signupForm) signupForm.classList.add("active");
+  }
+});
+
 
     // Logout
     const logoutBtn = document.getElementById("logout-btn");
