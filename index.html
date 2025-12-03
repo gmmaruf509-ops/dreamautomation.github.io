@@ -820,27 +820,23 @@
       });
     }
 
-    // Auth state change – navbar toggle
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        if (navLoggedOut) navLoggedOut.classList.add("hidden");
-        if (navLoggedIn) navLoggedIn.classList.remove("hidden");
-        const name = user.displayName || user.email;
-        if (navUsername) navUsername.textContent = "Welcome, " + name;
-      } else {
-        if (navLoggedOut) navLoggedOut.classList.remove("hidden");
-        if (navLoggedIn) navLoggedIn.classList.add("hidden");
-      }
-    });
+    // Auth state change – navbar + auth section toggle
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // Navbar states
+    if (navLoggedOut) navLoggedOut.classList.add("hidden");
+    if (navLoggedIn) navLoggedIn.classList.remove("hidden");
 
-    // Logout
-    const logoutBtn = document.getElementById("logout-btn");
-    if (logoutBtn) {
-      logoutBtn.addEventListener("click", async () => {
-        await signOut(auth);
-        alert("🔓 Logged out");
-      });
-    }
-  </script>
-</body>
-</html>
+    const name = user.displayName || user.email;
+    if (navUsername) navUsername.textContent = "Welcome, " + name;
+
+    // 👉 logged-in হলে Sign Up / Login সেকশন পুরো লুকিয়ে রাখো
+    if (authSection) authSection.classList.add("hidden");
+  } else {
+    // Logged out অবস্থায় আবার সব দেখাও
+    if (navLoggedOut) navLoggedOut.classList.remove("hidden");
+    if (navLoggedIn) navLoggedIn.classList.add("hidden");
+
+    if (authSection) authSection.classList.remove("hidden");
+  }
+});
