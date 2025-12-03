@@ -1,806 +1,731 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Dream Automation – Dashboard</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard – Dream Automation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: radial-gradient(circle at top, #3a4bff 0, #050018 55%, #02000b 100%);
+      color: #f9fafb;
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .app-shell {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ===== sidebar ===== */
+
+    .sidebar {
+      width: 220px;
+      background: rgba(3, 7, 18, 0.95);
+      border-right: 1px solid rgba(148, 163, 184, 0.15);
+      padding: 18px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .brand-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #22c55e, #0ea5e9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .brand-text {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .nav-section-title {
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(148, 163, 184, 0.9);
+      margin: 6px 0 4px;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .nav-item > a {
+      display: block;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 13px;
+      color: rgba(226, 232, 240, 0.9);
+    }
+
+    .nav-item.active > a {
+      background: linear-gradient(90deg, #22c55e, #0ea5e9);
+      color: #020617;
+      font-weight: 600;
+    }
+
+    .nav-item > a:hover {
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      font-size: 11px;
+      color: rgba(148, 163, 184, 0.7);
+    }
+
+    /* ===== main ===== */
+
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 26px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+      background: radial-gradient(circle at top left, #1f2937 0, #020617 55%);
+      backdrop-filter: blur(18px);
+    }
+
+    .topbar-left {
+      font-size: 13px;
+      color: rgba(148, 163, 184, 0.9);
+    }
+
+    .topbar-left span {
+      color: #e5e7eb;
+      font-weight: 600;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+    }
+
+    .pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      color: rgba(226, 232, 240, 0.9);
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 6px 16px;
+      font-size: 13px;
+      cursor: pointer;
+      background: #0f172a;
+      color: #e5e7eb;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+    }
+
+    .btn:hover {
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, #22c55e, #0ea5e9);
+      color: #020617;
+      border-color: transparent;
+      font-weight: 600;
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.05);
+    }
+
+    .btn-wide {
+      width: 100%;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+
+    /* ===== content ===== */
+
+    .content {
+      flex: 1;
+      padding: 24px 26px 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: rgba(148, 163, 184, 0.9);
+    }
+
+    .grid-two {
+      display: grid;
+      grid-template-columns: 2.1fr 1.2fr;
+      gap: 18px;
+      align-items: flex-start;
+    }
+
+    .card {
+      border-radius: 18px;
+      background: radial-gradient(circle at top left,
+          rgba(30, 64, 175, 0.45),
+          rgba(15, 23, 42, 0.98));
+      padding: 18px 20px 18px;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.85);
+    }
+
+    .card h3 {
+      font-size: 15px;
+      margin-bottom: 10px;
+    }
+
+    .muted {
+      font-size: 12px;
+      color: rgba(148, 163, 184, 0.9);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      color: #e5e7eb;
+      gap: 6px;
+    }
+
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+    }
+
+    .account-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      gap: 10px;
+    }
+
+    .account-meta {
+      font-size: 12px;
+      color: rgba(148, 163, 184, 0.9);
+    }
+
+    .account-meta p + p {
+      margin-top: 4px;
+    }
+
+    .trial-bar {
+      margin-top: 10px;
+      border-radius: 999px;
+      padding: 10px 14px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 500;
+      background: linear-gradient(90deg, #22c55e, #0ea5e9);
+      color: #020617;
+    }
+
+    .trial-bar span {
+      font-weight: 600;
+    }
+
+    .trial-actions {
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .trial-status-text {
+      font-size: 12px;
+      color: rgba(148, 163, 184, 0.95);
+    }
+
+    /* ===== Trial Key – বড় লেখা ===== */
+
+    .trial-key-box {
+      margin-top: 10px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px dashed rgba(148, 163, 184, 0.75);
+      text-align: center;
+    }
+
+    .trial-key {
+      font-family: "Fira Code", "Consolas", monospace;
+      font-size: 22px !important; /* এখানে সাইজ বড় */
+      letter-spacing: 0.10em;
+      color: #ffffff;
+      user-select: all;
+      word-break: break-all;
+    }
+
+    .trial-key-label {
+      font-weight: 700;
+      margin-right: 8px;
+    }
+
+    .trial-key-value {
+      font-weight: 600;
+    }
+
+    /* ===== bottom ===== */
+
+    .footer {
+      margin-top: auto;
+      font-size: 11px;
+      text-align: center;
+      color: rgba(148, 163, 184, 0.75);
+      padding-top: 10px;
+    }
+
+    @media (max-width: 960px) {
+      .app-shell {
+        flex-direction: column;
       }
-      body {
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-          sans-serif;
-        background: radial-gradient(circle at top, #201447, #050119 60%);
-        color: #f8fafc;
-      }
-      a {
-        color: inherit;
-        text-decoration: none;
-      }
-      .layout {
-        display: flex;
-        min-height: 100vh;
-      }
-      /* Sidebar */
       .sidebar {
-        width: 230px;
-        background: linear-gradient(180deg, #050119, #05040f);
-        border-right: 1px solid rgba(148, 163, 184, 0.1);
-        padding: 20px 16px;
-        display: flex;
-        flex-direction: column;
-        gap: 24px;
-      }
-      .logo {
-        display: flex;
+        width: 100%;
+        flex-direction: row;
         align-items: center;
-        gap: 8px;
-        font-weight: 700;
-        font-size: 18px;
+        overflow-x: auto;
       }
-      .logo-icon {
-        width: 28px;
-        height: 28px;
-        border-radius: 8px;
-        background: linear-gradient(135deg, #f97316, #ec4899);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 900;
-      }
-      .menu-section-title {
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        opacity: 0.5;
-        margin-bottom: 6px;
-      }
-      .menu {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-      }
-      .menu-item {
-        padding: 9px 10px;
-        border-radius: 10px;
-        font-size: 14px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        cursor: pointer;
-        color: #cbd5f5;
-      }
-      .menu-item:hover {
-        background: rgba(148, 163, 184, 0.08);
-      }
-      .menu-item.active {
-        background: linear-gradient(90deg, #0ea5e9, #22c55e);
-        color: #0b1220;
-        font-weight: 600;
-      }
-      .menu-item-icon {
-        font-size: 16px;
-      }
-      .sidebar-footer {
-        margin-top: auto;
-        font-size: 11px;
-        opacity: 0.5;
-      }
-      /* Main */
       .main {
         flex: 1;
-        display: flex;
-        flex-direction: column;
       }
-      .topbar {
-        height: 56px;
-        border-bottom: 1px solid rgba(148, 163, 184, 0.12);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 32px;
-        background: radial-gradient(circle at top left, #1e293b33, transparent);
+      .grid-two {
+        grid-template-columns: 1fr;
       }
-      .topbar-left {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 14px;
-      }
-      .topbar-title {
-        font-weight: 600;
-        font-size: 15px;
-      }
-      .topbar-badge {
-        font-size: 11px;
-        padding: 2px 7px;
-        border-radius: 999px;
-        background: rgba(148, 163, 184, 0.2);
-        color: #e5e7eb;
-      }
-      .topbar-right {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 14px;
-      }
-      .chip {
-        padding: 5px 10px;
-        border-radius: 999px;
-        background: rgba(15, 23, 42, 0.9);
-        border: 1px solid rgba(148, 163, 184, 0.3);
-        font-size: 13px;
-      }
-      .btn {
-        border-radius: 999px;
-        border: 0;
-        cursor: pointer;
-        font-size: 13px;
-        padding: 7px 14px;
-        font-weight: 500;
-      }
-      .btn-outline {
-        background: transparent;
-        color: #e5e7eb;
-        border: 1px solid rgba(148, 163, 184, 0.6);
-      }
-      .btn-primary {
-        background: linear-gradient(135deg, #22c55e, #0ea5e9);
-        color: #020617;
-      }
-      .btn-primary:disabled {
-        opacity: 0.6;
-        cursor: default;
-      }
-      .btn-danger {
-        background: linear-gradient(135deg, #ef4444, #f97316);
-        color: #0b1220;
-      }
-      .content {
-        padding: 24px 32px 28px;
-        overflow-x: hidden;
-      }
-      .section-title {
-        font-size: 26px;
-        font-weight: 700;
-        margin-bottom: 4px;
-      }
-      .section-subtitle {
-        font-size: 13px;
-        opacity: 0.7;
-      }
-      .pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 4px 10px;
-        border-radius: 999px;
-        background: rgba(148, 163, 184, 0.08);
-        border: 1px solid rgba(148, 163, 184, 0.2);
-        font-size: 11px;
-        margin-bottom: 10px;
-      }
-      .pill-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 999px;
-        background: #22c55e;
-      }
-      .grid-2 {
-        display: grid;
-        grid-template-columns: minmax(0, 1.8fr) minmax(0, 1.2fr);
-        gap: 20px;
-        margin-top: 18px;
-      }
-      .card {
-        background: radial-gradient(circle at top left, #1f2937aa, #020617ee);
-        border-radius: 20px;
-        border: 1px solid rgba(148, 163, 184, 0.16);
-        padding: 18px 18px 16px;
-      }
-      .card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 12px;
-      }
-      .card-title {
-        font-size: 15px;
-        font-weight: 600;
-      }
-      .pill-small {
-        font-size: 11px;
-        padding: 2px 8px;
-        border-radius: 999px;
-        background: rgba(15, 23, 42, 0.9);
-        border: 1px solid rgba(148, 163, 184, 0.35);
-      }
-      .tag-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-        margin-bottom: 12px;
-      }
-      .tag {
-        padding: 2px 8px;
-        border-radius: 999px;
-        font-size: 11px;
-        border: 1px solid rgba(148, 163, 184, 0.3);
-        opacity: 0.85;
-      }
-      .btn-wide {
-        margin-top: 8px;
-        width: 100%;
-        padding: 10px 14px;
-        font-size: 14px;
-        border-radius: 999px;
-        border: 0;
-        cursor: pointer;
-        background: linear-gradient(90deg, #22c55e, #0ea5e9);
-        color: #020617;
-        font-weight: 600;
-      }
-      .btn-wide.secondary {
-        background: rgba(15, 23, 42, 0.9);
-        color: #e5e7eb;
-        border: 1px solid rgba(148, 163, 184, 0.4);
-      }
-      .small-text {
-        font-size: 11px;
-        opacity: 0.65;
-        margin-top: 6px;
-      }
-      .trial-status {
-        font-size: 13px;
-        margin: 8px 0 4px;
-      }
-      .trial-key-box {
-        margin-top: 10px;
-        padding: 10px 12px;
-        border-radius: 12px;
-        background: rgba(15, 23, 42, 0.9);
-        border: 1px dashed rgba(96, 165, 250, 0.6);
-        font-family: "Consolas", ui-monospace, SFMono-Regular, Menlo, Monaco,
-          "Liberation Mono", "Courier New", monospace;
-        font-size: 12px;
-        word-break: break-all;
-      }
-      .trial-key-label {
-        font-size: 11px;
-        opacity: 0.7;
-        margin-bottom: 3px;
-      }
-      .trial-key {
-        font-size: 12px;
-        color: #7dd3fc;
-      }
-      .pill-plan {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 3px 9px;
-        border-radius: 999px;
-        background: rgba(15, 23, 42, 0.9);
-        border: 1px solid rgba(96, 165, 250, 0.7);
-        font-size: 11px;
-      }
-      .pill-plan-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 999px;
-        background: #22c55e;
-      }
-      .tools-section {
-        margin-top: 26px;
-      }
-      .tools-grid {
-        display: grid;
-        grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.2fr);
-        gap: 12px;
-      }
-      .tool-card {
-        background: radial-gradient(circle at top left, #111827dd, #020617f0);
-        border-radius: 16px;
-        padding: 12px 14px;
-        border: 1px solid rgba(148, 163, 184, 0.2);
-        font-size: 13px;
-      }
-      .tool-title {
-        font-weight: 600;
-        margin-bottom: 4px;
-      }
-      .footer {
-        margin-top: 28px;
-        font-size: 11px;
-        opacity: 0.6;
-        text-align: center;
-      }
-      .footer span {
-        opacity: 0.8;
-      }
-      @media (max-width: 980px) {
-        .layout {
-          flex-direction: column;
-        }
-        .sidebar {
-          width: 100%;
-          flex-direction: row;
-          align-items: center;
-          justify-content: space-between;
-          padding-bottom: 12px;
-        }
-        .main {
-          flex: 1;
-        }
-        .grid-2 {
-          grid-template-columns: minmax(0, 1fr);
-        }
-        .tools-grid {
-          grid-template-columns: minmax(0, 1fr);
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="layout">
-      <!-- Sidebar -->
-      <aside class="sidebar">
-        <div>
-          <div class="logo">
-            <div class="logo-icon">DA</div>
-            <div>
-              <div>Dream</div>
-              <div style="font-size: 13px; opacity: 0.7">Automation</div>
-            </div>
-          </div>
+    }
+  </style>
+</head>
 
-          <div style="margin-top: 24px">
-            <div class="menu-section-title">Main</div>
-            <nav class="menu">
-              <div class="menu-item active">
-                <span class="menu-item-icon">🏠</span>
-                <span>Dashboard</span>
-              </div>
-              <div class="menu-item">
-                <span class="menu-item-icon">📦</span>
-                <span>My Products</span>
-              </div>
-              <div class="menu-item">
-                <span class="menu-item-icon">🧾</span>
-                <span>Orders</span>
-              </div>
-            </nav>
-          </div>
-
-          <div style="margin-top: 18px">
-            <div class="menu-section-title">Account</div>
-            <nav class="menu">
-              <div class="menu-item">
-                <span class="menu-item-icon">⚙️</span>
-                <span>Account Settings</span>
-              </div>
-              <div class="menu-item">
-                <span class="menu-item-icon">💬</span>
-                <span>Support Center</span>
-              </div>
-            </nav>
-          </div>
+<body>
+  <div class="app-shell">
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar">
+      <div>
+        <div class="brand">
+          <div class="brand-logo">DA</div>
+          <div class="brand-text">Dream Automation</div>
         </div>
 
-        <div class="sidebar-footer">
-          © <span id="year"></span> Dream Automation
+        <div class="nav-section">
+          <div class="nav-section-title">Main</div>
+          <ul class="nav-list">
+            <li class="nav-item active"><a href="#">Dashboard</a></li>
+            <li class="nav-item"><a href="#">My Products</a></li>
+            <li class="nav-item"><a href="#">Orders</a></li>
+          </ul>
         </div>
-      </aside>
 
-      <!-- Main -->
-      <div class="main">
-        <!-- Topbar -->
-        <header class="topbar">
-          <div class="topbar-left">
-            <span class="topbar-title">Dashboard</span>
-            <span class="topbar-badge">Manage your licenses &amp; downloads</span>
-          </div>
-          <div class="topbar-right">
-            <div class="chip" id="nav-username">Welcome</div>
-            <a href="index.html" class="btn btn-outline">Back to site</a>
-            <button class="btn btn-danger" id="logout-btn">Log out</button>
-          </div>
-        </header>
+        <div class="nav-section">
+          <div class="nav-section-title">Account</div>
+          <ul class="nav-list">
+            <li class="nav-item"><a href="#">Account Settings</a></li>
+            <li class="nav-item"><a href="#">Support Center</a></li>
+          </ul>
+        </div>
+      </div>
 
-        <!-- Content -->
-        <main class="content">
+      <div class="sidebar-footer">
+        © <span id="year"></span> Dream Automation
+      </div>
+    </aside>
+
+    <!-- ===== MAIN ===== -->
+    <main class="main">
+      <!-- topbar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          Manage your licenses &amp; downloads
+          <span> · Dashboard</span>
+        </div>
+        <div class="topbar-right">
           <div class="pill">
-            <span class="pill-dot"></span>
-            <span>All-in-one automation suite for your business</span>
+            Welcome, <span id="nav-username">loading...</span>
           </div>
-          <h1 class="section-title">Welcome, <span id="dash-username">abdulla</span></h1>
-          <p class="section-subtitle">
-            Manage your license, download the software and access all AI tools from a single dashboard.
+          <button class="btn" id="back-to-site-btn">Back to site</button>
+          <button class="btn btn-primary" id="logout-btn">Log out</button>
+        </div>
+      </header>
+
+      <!-- content -->
+      <section class="content">
+        <div>
+          <h1>Welcome, <span id="dash-username">loading...</span></h1>
+          <p class="subtitle">
+            Manage your license, download the software and access all automation
+            tools from a single dashboard.
           </p>
+        </div>
 
-          <section class="grid-2" style="margin-top: 20px">
-            <!-- Product card -->
-            <div class="card">
-              <div class="card-header">
-                <div>
-                  <div class="card-title">Your Product</div>
-                  <div style="font-size: 12px; opacity: 0.8; margin-top: 2px">
-                    Dream Automation – All-in-one automation software for your business.
-                  </div>
-                </div>
-                <span class="pill-small">AI-powered</span>
-              </div>
+        <div class="grid-two">
+          <!-- LEFT: Product / downloads -->
+          <article class="card">
+            <h3>Your Product</h3>
+            <p class="muted" style="margin-bottom: 10px;">
+              Dream Automation – all-in-one automation software for your business.
+            </p>
 
-              <div class="tag-row">
-                <span class="tag">🚀 1-click workflows</span>
-                <span class="tag">💾 Lifetime updates (lifetime plan)</span>
-                <span class="tag">🌐 Multi-platform</span>
-              </div>
+            <div style="margin-top: 8px; margin-bottom: 8px;">
+              <span class="badge">
+                <span class="badge-dot"></span>
+                AI-powered
+              </span>
+              <span class="badge" style="margin-left: 6px;">
+                1-click workflows
+              </span>
+              <span class="badge" style="margin-left: 6px;">
+                Lifetime updates (lifetime plan)
+              </span>
+            </div>
 
-              <button class="btn-wide">↓ Download Software</button>
+            <button class="btn btn-primary btn-wide" style="margin-top: 16px;">
+              ↓ Download Software
+            </button>
 
-              <div class="small-text">
-                TODO: এখানে download link বসাও (Google Drive / নিজের server ইত্যাদি)।
-              </div>
+            <button class="btn btn-wide" style="margin-top: 10px;">
+              🛒 Buy Lifetime Access
+            </button>
+          </article>
 
-              <button class="btn-wide secondary" style="margin-top: 14px">
-                💳 Buy Lifetime Access
-              </button>
-              <div class="small-text">
-                TODO: এখানে payment / checkout link বসাও (Gumroad, Stripe ইত্যাদি)।
+          <!-- RIGHT: Account overview -->
+          <article class="card">
+            <div class="account-header">
+              <h3>Account Overview</h3>
+              <div class="badge" id="plan-badge">
+                <span class="badge-dot"></span>
+                <span id="badge-text">Free</span>
               </div>
             </div>
 
-            <!-- Account overview / Trial -->
-            <div class="card">
-              <div class="card-header">
-                <div>
-                  <div class="card-title">Account Overview</div>
-                  <div style="font-size: 12px; opacity: 0.8; margin-top: 2px">
-                    Basic account information and current plan.
-                  </div>
-                </div>
-                <div class="pill-plan">
-                  <span class="pill-plan-dot" id="plan-dot"></span>
-                  <span id="plan-status">Free</span>
-                </div>
-              </div>
+            <div class="account-meta">
+              <p>
+                <strong>Email:</strong>
+                <span id="dash-email">loading...</span>
+              </p>
+              <p>
+                <strong>Plan:</strong>
+                <span id="plan-label">Free / Trial (loading)</span>
+              </p>
+              <p>
+                <strong>Status:</strong>
+                <span id="status-label">Loading...</span>
+              </p>
+            </div>
 
-              <div style="font-size: 13px; line-height: 1.6">
-                <div><strong>Email:</strong> <span id="dash-email">loading…</span></div>
-                <div>
-                  <strong>Plan:</strong>
-                  <span id="plan-name">Free / Trial (not requested)</span>
-                </div>
-              </div>
+            <!-- Trial banner -->
+            <div class="trial-bar" id="trial-bar">
+              <span id="trial-bar-label">Free</span>
+            </div>
 
-              <div class="trial-status" id="trial-message" style="margin-top: 10px">
-                Loading trial status…
-              </div>
-
+            <!-- Trial controls -->
+            <div class="trial-actions">
               <button
-                class="btn-wide"
-                style="margin-top: 8px"
-                id="request-trial-btn"
-              >
+                class="btn btn-primary btn-wide"
+                id="request-trial-btn">
                 Request 2-Day Free Trial
               </button>
 
-              <div class="trial-key-box"
-     id="trial-key-box"
-     style="display: none">
-  <div class="trial-key" id="trial-key-text"></div>
-</div>
-
+              <p class="trial-status-text" id="trial-status-text">
+                Loading trial status...
+              </p>
             </div>
-          </section>
 
-          <!-- Available tools -->
-          <section class="tools-section">
-            <h2
-              style="
-                font-size: 18px;
-                font-weight: 600;
-                margin-bottom: 8px;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-              "
-            >
-              Available AI Tools
-              <span
-                style="
-                  font-size: 11px;
-                  font-weight: 500;
-                  padding: 2px 8px;
-                  border-radius: 999px;
-                  background: rgba(148, 163, 184, 0.15);
-                "
-                >Included with your license</span
-              >
-            </h2>
-
-            <div class="tools-grid">
-              <div class="tool-card">
-                <div class="tool-title">
-                  ✓ YouTube Video → AI Video (One Click)
-                </div>
-                <div style="font-size: 12px; opacity: 0.9">
-                  এক ক্লিকে YouTube লিংক থেকে সম্পূর্ণ AI ভিডিও তৈরি।
-                </div>
-              </div>
-
-              <div class="tool-card">
-                <div class="tool-title">
-                  ✓ Text → Video (AI Video Generator)
-                </div>
-                <div style="font-size: 12px; opacity: 0.9">
-                  যেকোনো টেক্সট → অটো ভিজ্যুয়াল, সিন, ভিডিও।
-                </div>
-              </div>
-
-              <div class="tool-card">
-                <div class="tool-title">
-                  ✓ Script → Long Video (One Click)
-                </div>
-                <div style="font-size: 12px; opacity: 0.9">
-                  স্ক্রিপ্ট দিন → AI অটো স্টোরিবোর্ড + সিন + দীর্ঘ ভিডিও তৈরি করবে।
-                </div>
-              </div>
-
-              <div class="tool-card">
-                <div class="tool-title">✓ Video Prompt Generator</div>
-                <div style="font-size: 12px; opacity: 0.9">
-                  যেকোনো ভিডিও থেকে scene-by-scene প্রম্পট অটো জেনারেট।
-                </div>
-              </div>
-
-              <div class="tool-card">
-                <div class="tool-title">✓ AI Cinematic Scene Helper</div>
-                <div style="font-size: 12px; opacity: 0.9">
-                  ব্যবহার অনুযায়ী AI সিনেমাটিক শট সাজিয়ে দেয়।
-                </div>
-              </div>
-
-              <div class="tool-card">
-                <div class="tool-title">✓ Dedicated Support Team</div>
-                <div style="font-size: 12px; opacity: 0.9">
-                  ২৪/৭ সাপোর্ট সুবিধা – ইমেইল ও মেসেঞ্জার।
-                </div>
+            <!-- বড় করে key দেখানোর জন্য -->
+            <div
+              class="trial-key-box"
+              id="trial-key-box"
+              style="display: none">
+              <div class="trial-key">
+                <span class="trial-key-label">Your Key = </span>
+                <span
+                  class="trial-key-value"
+                  id="trial-key-text">
+                  00000000-0000-0000-0000-000000000000
+                </span>
               </div>
             </div>
-          </section>
+          </article>
+        </div>
 
-          <div class="footer">
-            <span>Need help?</span> Contact us any time – your success with Dream
-            Automation is our top priority.
-          </div>
-        </main>
-      </div>
-    </div>
+        <div class="footer">
+          Need help? Contact us any time — your success with Dream Automation is
+          our top priority.
+        </div>
+      </section>
+    </main>
+  </div>
 
-    <!-- Firebase + Auth + Trial logic -->
-    <script type="module">
-      // ===== নিচের span এ বর্তমান বছর বসাই =====
-      const yearEl = document.getElementById("year");
-      if (yearEl) yearEl.textContent = new Date().getFullYear();
+  <!-- ===== Firebase + Trial logic ===== -->
+  <script type="module">
+    // footer year
+    const yearEl = document.getElementById("year");
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-      // ===== তোমার Bridge Apps Script URL (JSONP) =====
-      const BRIDGE_API_URL =
-        "https://script.google.com/macros/s/AKfycbwUMn-tpNUlbaOoYQLA_7RRS_geJ-Vl0z1gLs8goCMB62yyXaTeJr4xKU3SRZGnoIMK/exec";
-
-      // ----- JSONP helper: CORS এড়ানোর জন্য -----
-      function jsonp(url) {
-        return new Promise((resolve, reject) => {
-          const cbName = "cb_" + Math.random().toString(36).slice(2);
-          window[cbName] = (data) => {
-            resolve(data);
-            delete window[cbName];
-            script.remove();
-          };
-          const script = document.createElement("script");
-          script.src = url + (url.includes("?") ? "&" : "?") + "callback=" + cbName;
-          script.onerror = (err) => {
-            reject(err);
-            delete window[cbName];
-            script.remove();
-          };
-          document.body.appendChild(script);
-        });
-      }
-
-      // ----- Apps Script trial API কল করার ফাংশন -----
-      async function callTrialApi(action, email) {
-        const url =
-          BRIDGE_API_URL +
-          "?action=" +
-          encodeURIComponent(action) +
-          "&email=" +
-          encodeURIComponent(email);
-        const data = await jsonp(url);
-        return data;
-      }
-
-      // ===== Firebase imports =====
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-      import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
-      import {
-        getAuth,
-        onAuthStateChanged,
-        signOut,
-      } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-
-      // ===== Firebase config (তোমার প্রোজেক্ট) =====
-      const firebaseConfig = {
-        apiKey: "AIzaSyA_lZmfn4T31B6jm1dB0UywR7OEgYIPlo0",
-        authDomain: "sceneflow-studio.firebaseapp.com",
-        projectId: "sceneflow-studio",
-        storageBucket: "sceneflow-studio.firebasestorage.app",
-        messagingSenderId: "961327164320",
-        appId: "1:961327164320:web:7ffb160db2529f4c1412c5",
-        measurementId: "G-56962H6FQ4",
-      };
-
-      const app = initializeApp(firebaseConfig);
-      getAnalytics(app);
-      const auth = getAuth(app);
-
-      // ===== DOM রেফারেন্সগুলো =====
-      const navUsername = document.getElementById("nav-username");
-      const dashUsername = document.getElementById("dash-username");
-      const dashEmail = document.getElementById("dash-email");
-      const planNameEl = document.getElementById("plan-name");
-      const planStatusEl = document.getElementById("plan-status");
-      const requestTrialBtn = document.getElementById("request-trial-btn");
-      const trialMessage = document.getElementById("trial-message");
-      const trialKeyBox = document.getElementById("trial-key-box");
-      const trialKeyText = document.getElementById("trial-key-text");
-      const logoutBtn = document.getElementById("logout-btn");
-
-      let currentUser = null;
-
-      function setText(el, text) {
-        if (el) el.textContent = text;
-      }
-
-      function showTrialKey(key) {
-        if (!trialKeyBox || !trialKeyText) return;
-        if (!key) {
-          trialKeyBox.style.display = "none";
-          return;
-        }
-        trialKeyBox.style.display = "block";
-        trialKeyText.textContent = key;
-      }
-
-      // Apps Script থেকে আসা ডাটা দিয়ে UI আপডেট
-      function updateTrialUI(data) {
-        if (!data || data.status !== "ok") {
-          const msg = data && data.message ? data.message : "Could not load trial info.";
-          if (trialMessage) trialMessage.textContent = "Error: " + msg;
-          if (requestTrialBtn) {
-            requestTrialBtn.disabled = true;
-            requestTrialBtn.textContent = "Error";
-          }
-          showTrialKey(null);
-          return;
-        }
-
-        const state = data.state; // none | active | expired | already_active | created
-        const key = data.license_key || "";
-        const expiry = data.expiry || "";
-
-        if (state === "none") {
-          setText(planNameEl, "Free / Trial (not requested)");
-          setText(planStatusEl, "Free");
-          if (trialMessage)
-            trialMessage.textContent = "You can request a free 2-day trial.";
-          showTrialKey(null);
-          if (requestTrialBtn) {
-            requestTrialBtn.disabled = false;
-            requestTrialBtn.textContent = "Request 2-Day Free Trial";
-          }
-          return;
-        }
-
-        if (state === "active" || state === "already_active" || state === "created") {
-          setText(planNameEl, "Trial (active)");
-          setText(planStatusEl, "Active");
-          if (trialMessage)
-            trialMessage.textContent =
-              "Your 2-day trial is active. Use the key below inside the software." +
-              (expiry ? " Expires at: " + expiry : "");
-          showTrialKey(key);
-          if (requestTrialBtn) {
-            requestTrialBtn.disabled = true;
-            requestTrialBtn.textContent = "Trial active";
-          }
-          return;
-        }
-
-        if (state === "expired") {
-          setText(planNameEl, "Trial (expired)");
-          setText(planStatusEl, "Expired");
-          if (trialMessage)
-            trialMessage.textContent =
-              "Your 2-day trial has expired." +
-              (expiry ? " Expired at: " + expiry : "");
-          showTrialKey(key);
-          if (requestTrialBtn) {
-            requestTrialBtn.disabled = true;
-            requestTrialBtn.textContent = "Trial expired";
-          }
-          return;
-        }
-
-        if (trialMessage)
-          trialMessage.textContent = "Unknown state: " + state;
-        showTrialKey(key);
-        if (requestTrialBtn) requestTrialBtn.disabled = true;
-      }
-
-      // ===== Auth state change =====
-      onAuthStateChanged(auth, async (user) => {
-        if (!user) {
-          // লগইন না থাকলে main site এ পাঠাও
-          window.location.href = "index.html#auth";
-          return;
-        }
-        currentUser = user;
-        const email = (user.email || "").toLowerCase();
-
-        setText(navUsername, "Welcome, " + (user.displayName || email));
-        setText(dashUsername, user.displayName || email);
-        setText(dashEmail, email);
-
-        try {
-          const data = await callTrialApi("trial_status", email);
-          updateTrialUI(data);
-        } catch (err) {
-          console.error("trial_status error:", err);
-          if (trialMessage)
-            trialMessage.textContent = "Error loading trial status.";
-        }
+    const backBtn = document.getElementById("back-to-site-btn");
+    if (backBtn) {
+      backBtn.addEventListener("click", () => {
+        window.location.href = "index.html";
       });
+    }
 
-      // ===== Trial request বোতাম =====
-      if (requestTrialBtn) {
-        requestTrialBtn.addEventListener("click", async () => {
-          if (!currentUser) return;
-          const email = (currentUser.email || "").toLowerCase();
+    // ===== Apps Script bridge URL =====
+    const BRIDGE_API_URL =
+      "https://script.google.com/macros/s/AKfycbwUMn-tpNUlbaOoYQLA_7RRS_geJ-Vl0z1gLs8goCMB62yyXaTeJr4xKU3SRZGnoIMK/exec";
 
-          requestTrialBtn.disabled = true;
-          requestTrialBtn.textContent = "Requesting...";
+    async function callTrialApi(action, email) {
+      const res = await fetch(BRIDGE_API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action, email }),
+      });
+      return await res.json();
+    }
 
+    // ===== Firebase imports =====
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut,
+    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+    // ===== Firebase config (তোমার প্রজেক্ট) =====
+    const firebaseConfig = {
+      apiKey: "AIzaSyA_lZmfn4T31B6jm1dB0UywR7OEgYIPlo0",
+      authDomain: "sceneflow-studio.firebaseapp.com",
+      projectId: "sceneflow-studio",
+      storageBucket: "sceneflow-studio.firebasestorage.app",
+      messagingSenderId: "961327164320",
+      appId: "1:961327164320:web:7ffb160db2529f4c1412c5",
+      measurementId: "G-56962H6FQ4",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    getAnalytics(app);
+    const auth = getAuth(app);
+
+    // ===== DOM refs =====
+    const navUsername = document.getElementById("nav-username");
+    const dashUsername = document.getElementById("dash-username");
+    const dashEmail = document.getElementById("dash-email");
+    const planLabel = document.getElementById("plan-label");
+    const statusLabel = document.getElementById("status-label");
+    const badgeText = document.getElementById("badge-text");
+    const trialBar = document.getElementById("trial-bar");
+    const trialBarLabel = document.getElementById("trial-bar-label");
+    const trialBtn = document.getElementById("request-trial-btn");
+    const trialStatusText = document.getElementById("trial-status-text");
+    const trialKeyBox = document.getElementById("trial-key-box");
+    const trialKeyText = document.getElementById("trial-key-text");
+    const logoutBtn = document.getElementById("logout-btn");
+
+    // ===== date helper: দিন মাস বছর =====
+    function formatDateDMY(isoString) {
+      const d = new Date(isoString);
+      if (isNaN(d.getTime())) return isoString;
+      const months = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+      const day = d.getUTCDate();
+      const month = months[d.getUTCMonth()];
+      const year = d.getUTCFullYear();
+      return `${day} ${month} ${year}`;
+    }
+
+    // ===== trial status load =====
+    async function loadTrialStatus(email) {
+      trialStatusText.textContent = "Loading trial status...";
+      trialKeyBox.style.display = "none";
+
+      try {
+        const data = await callTrialApi("trial_status", email);
+
+        if (data.status !== "ok") {
+          throw new Error(data.message || "Unknown error");
+        }
+
+        // mode: আমরা Code.gs এ যেমন সেট করেছি – উদাহরণ:
+        // "none", "trial_active", "trial_expired", "paid"
+        const mode = data.mode || "none";
+
+        if (mode === "none") {
+          planLabel.textContent = "Free / Trial (not requested)";
+          statusLabel.textContent = "Free";
+          badgeText.textContent = "Free";
+          trialBarLabel.textContent = "Free";
+          trialBar.textContent = "Free plan – you haven't used your trial yet.";
+          trialBtn.style.display = "inline-flex";
+          trialBtn.disabled = false;
+          trialBtn.textContent = "Request 2-Day Free Trial";
+          trialStatusText.textContent =
+            "You can request a 2-day free trial. Click the button above.";
+        } else if (mode === "trial_active") {
+          planLabel.textContent = "Trial (active)";
+          statusLabel.textContent = "Active";
+          badgeText.textContent = "Trial";
+          trialBarLabel.textContent = "Trial active";
+
+          const niceDate = formatDateDMY(data.expiry);
+          trialBar.textContent = `Trial active · Expires on ${niceDate}`;
+          trialBtn.style.display = "none";
+
+          trialStatusText.textContent =
+            "Your 2-day trial is active. Use the key below inside the software.";
+          trialKeyText.textContent = data.license_key || "";
+          trialKeyBox.style.display = "block";
+        } else if (mode === "trial_expired") {
+          planLabel.textContent = "Trial (expired)";
+          statusLabel.textContent = "Expired";
+          badgeText.textContent = "Trial expired";
+          trialBarLabel.textContent = "Trial expired";
+
+          const niceDate = formatDateDMY(data.expiry);
+          trialBar.textContent = `Your trial expired on ${niceDate}`;
+          trialBtn.style.display = "none";
+          trialKeyBox.style.display = "none";
+          trialStatusText.textContent =
+            "Your trial has ended. Please purchase a license to continue.";
+        } else if (mode === "paid") {
+          planLabel.textContent = "Paid";
+          statusLabel.textContent = "Active";
+          badgeText.textContent = "Lifetime";
+          trialBarLabel.textContent = "Lifetime license";
+          trialBar.textContent =
+            "You have an active paid license. Enjoy all features without limits.";
+          trialBtn.style.display = "none";
+          trialKeyBox.style.display = "none";
+          trialStatusText.textContent = "";
+        } else {
+          throw new Error("Unknown mode");
+        }
+      } catch (err) {
+        console.error(err);
+        trialBarLabel.textContent = "Error";
+        trialBar.textContent = "Error loading trial status.";
+        trialStatusText.textContent =
+          "Could not load trial status. Please try again later.";
+        badgeText.textContent = "Free";
+        trialBtn.style.display = "inline-flex";
+      }
+    }
+
+    // ===== main auth handler =====
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "index.html";
+        return;
+      }
+
+      const email = user.email || "";
+      const name =
+        user.displayName || (email ? email.split("@")[0] : "User");
+
+      if (navUsername) navUsername.textContent = name;
+      if (dashUsername) dashUsername.textContent = name;
+      if (dashEmail) dashEmail.textContent = email;
+
+      await loadTrialStatus(email);
+
+      if (trialBtn) {
+        trialBtn.addEventListener("click", async () => {
+          trialBtn.disabled = true;
+          trialBtn.textContent = "Requesting...";
           try {
             const data = await callTrialApi("trial_create", email);
-            if (data.status !== "ok" && data.message) {
-              alert("Error: " + data.message);
+            if (data.status === "ok") {
+              alert("Trial created! Your key is now visible.");
+              await loadTrialStatus(email);
+            } else {
+              alert(data.message || "Could not create trial.");
             }
-            updateTrialUI(data);
-          } catch (err) {
-            console.error("trial_create error:", err);
-            alert("Network error: " + err);
-            requestTrialBtn.disabled = false;
-            requestTrialBtn.textContent = "Request 2-Day Free Trial";
+          } catch (e) {
+            console.error(e);
+            alert("Network error while requesting trial.");
+          } finally {
+            trialBtn.disabled = false;
           }
         });
       }
 
-      // ===== Logout বোতাম =====
       if (logoutBtn) {
         logoutBtn.addEventListener("click", async () => {
-          try {
-            await signOut(auth);
-          } catch (e) {
-            console.error(e);
-          }
+          await signOut(auth);
           window.location.href = "index.html";
         });
       }
-    </script>
-  </body>
+    });
+  </script>
+</body>
 </html>
