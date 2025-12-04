@@ -258,7 +258,7 @@
         margin: 8px 0 4px;
       }
 
-      /* ===== KEY BOX – এখানে বড় করে দেখানো হবে ===== */
+      /* ===== KEY BOX – বড় করে দেখানোর জন্য ===== */
       .trial-key-box {
         margin-top: 12px;
         padding: 14px 18px;
@@ -270,7 +270,7 @@
       .trial-key {
         font-family: "Consolas", ui-monospace, SFMono-Regular, Menlo, Monaco,
           "Liberation Mono", "Courier New", monospace;
-        font-size: 20px; /* বড় ফন্ট */
+        font-size: 20px;
         letter-spacing: 0.08em;
         color: #e5e7eb;
         word-break: break-all;
@@ -283,6 +283,24 @@
       .trial-key-value {
         font-weight: 600;
         color: #7dd3fc;
+      }
+      .copy-btn {
+        margin-top: 10px;
+        padding: 6px 14px;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.6);
+        background: rgba(15, 23, 42, 0.9);
+        color: #e5e7eb;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      .copy-btn:hover {
+        background: rgba(30, 64, 175, 0.9);
+      }
+      .copy-hint {
+        margin-top: 6px;
+        font-size: 11px;
+        color: #a5f3fc;
       }
 
       .pill-plan {
@@ -329,6 +347,96 @@
       .footer span {
         opacity: 0.8;
       }
+
+      /* ====== Plan Modal (Monthly / Lifetime) ====== */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.85);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 200;
+      }
+      .modal {
+        background: radial-gradient(circle at top left, #111827, #020617);
+        border-radius: 18px;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        padding: 20px 22px;
+        width: 100%;
+        max-width: 420px;
+        box-shadow: 0 25px 80px rgba(0, 0, 0, 0.8);
+      }
+      .modal-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+      .modal-sub {
+        font-size: 12px;
+        opacity: 0.75;
+        margin-bottom: 14px;
+      }
+      .modal-group {
+        margin-bottom: 10px;
+        font-size: 13px;
+      }
+      .modal-group label {
+        display: block;
+        margin-bottom: 4px;
+      }
+      .modal-input {
+        width: 100%;
+        border-radius: 10px;
+        padding: 8px 10px;
+        border: 1px solid rgba(148, 163, 184, 0.5);
+        background: #020617;
+        color: #e5e7eb;
+      }
+      .modal-radio-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 4px;
+        font-size: 13px;
+      }
+      .modal-radio {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 6px 8px;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.5);
+        background: rgba(15, 23, 42, 0.9);
+        cursor: pointer;
+      }
+      .modal-radio input {
+        accent-color: #22c55e;
+      }
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 16px;
+      }
+      .modal-btn {
+        border-radius: 999px;
+        border: 0;
+        padding: 7px 14px;
+        font-size: 13px;
+        cursor: pointer;
+      }
+      .modal-btn-secondary {
+        background: transparent;
+        border: 1px solid rgba(148, 163, 184, 0.6);
+        color: #e5e7eb;
+      }
+      .modal-btn-primary {
+        background: linear-gradient(135deg, #22c55e, #0ea5e9);
+        color: #020617;
+        font-weight: 600;
+      }
+
       @media (max-width: 980px) {
         .layout {
           flex-direction: column;
@@ -453,25 +561,26 @@
               </div>
 
               <a
-  href="https://github.com/gmmaruf509-ops/dream_automation_update/releases/download/v4.0.0/Dream.Automation.zip"
-  class="btn-wide"
-  target="_blank"
-  rel="noopener"
->
-  ↓ Download Software
-</a>
+                href="https://github.com/gmmaruf509-ops/dream_automation_update/releases/download/v4.0.0/Dream.Automation.zip"
+                class="btn-wide"
+                target="_blank"
+                rel="noopener"
+              >
+                ↓ Download Software
+              </a>
 
+              <div class="small-text">.</div>
 
-
-              <div class="small-text">
-                ।
-              </div>
-
-              <button class="btn-wide secondary" style="margin-top: 14px">
-                💳 Buy Lifetime Access
+              <!-- Payment / checkout → WhatsApp -->
+              <button
+                class="btn-wide secondary"
+                style="margin-top: 14px"
+                id="btn-payment-checkout"
+              >
+                💳 Buy Lifetime / Monthly Plan
               </button>
               <div class="small-text">
-                payment / checkout 
+                For Monthly or Lifetime plan, complete payment via WhatsApp.
               </div>
             </div>
 
@@ -518,25 +627,22 @@
               </button>
 
               <!-- BIG KEY BOX -->
-              <div
-  class="trial-key-box"
-  id="trial-key-box"
-  style="display: none"
->
-  <div class="trial-key">
-    <span class="trial-key-label">Your Key = </span>
-    <span class="trial-key-value" id="trial-key-text"></span>
-  </div>
+              <div class="trial-key-box" id="trial-key-box" style="display: none">
+                <div class="trial-key">
+                  <span class="trial-key-label">Your Key = </span>
+                  <span class="trial-key-value" id="trial-key-text"></span>
+                </div>
 
-  <button class="copy-btn" id="trial-key-copy-btn">
-    Copy key
-  </button>
+                <button class="copy-btn" id="trial-key-copy-btn">Copy key</button>
 
-  <div class="copy-hint" id="trial-key-copy-hint" style="display: none">
-    Copied!
-  </div>
-</div>
-
+                <div
+                  class="copy-hint"
+                  id="trial-key-copy-hint"
+                  style="display: none"
+                >
+                  Copied!
+                </div>
+              </div>
             </div>
           </section>
 
@@ -625,7 +731,56 @@
       </div>
     </div>
 
-    <!-- Firebase + Auth + Trial logic -->
+    <!-- Plan Modal -->
+    <div class="modal-overlay" id="plan-modal">
+      <div class="modal" role="dialog" aria-modal="true">
+        <div class="modal-title">Buy Monthly or Lifetime plan</div>
+        <div class="modal-sub">
+          Enter your email and choose a plan. On the next step you will be
+          redirected to WhatsApp to complete payment.
+        </div>
+
+        <div class="modal-group">
+          <label for="plan-email">Email address</label>
+          <input
+            id="plan-email"
+            type="email"
+            class="modal-input"
+            placeholder="name@example.com"
+          />
+        </div>
+
+        <div class="modal-group">
+          <label>Choose your plan</label>
+          <div class="modal-radio-row">
+            <label class="modal-radio">
+              <input
+                type="radio"
+                name="plan-choice"
+                value="Monthly Plan"
+                checked
+              />
+              <span>Monthly Pro</span>
+            </label>
+            <label class="modal-radio">
+              <input type="radio" name="plan-choice" value="Lifetime Access" />
+              <span>Lifetime Plan</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="modal-btn modal-btn-secondary" id="plan-modal-cancel">
+            Cancel
+          </button>
+          <button class="modal-btn modal-btn-primary" id="plan-modal-whatsapp">
+            Contact on WhatsApp
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Firebase + Auth + Trial + WhatsApp logic -->
     <script type="module">
       // ===== নিচের span এ বর্তমান বছর বসাই =====
       const yearEl = document.getElementById("year");
@@ -676,7 +831,7 @@
         signOut,
       } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
-      // ===== Firebase config (তোমার প্রোজেক্ট) =====
+      // ===== Firebase config =====
       const firebaseConfig = {
         apiKey: "AIzaSyA_lZmfn4T31B6jm1dB0UywR7OEgYIPlo0",
         authDomain: "sceneflow-studio.firebaseapp.com",
@@ -703,6 +858,17 @@
       const trialKeyText = document.getElementById("trial-key-text");
       const logoutBtn = document.getElementById("logout-btn");
 
+      const copyBtn = document.getElementById("trial-key-copy-btn");
+      const copyHint = document.getElementById("trial-key-copy-hint");
+
+      // Plan modal elements
+      const checkoutBtn = document.getElementById("btn-payment-checkout");
+      const planModal = document.getElementById("plan-modal");
+      const planEmailInput = document.getElementById("plan-email");
+      const planCancelBtn = document.getElementById("plan-modal-cancel");
+      const planWhatsBtn = document.getElementById("plan-modal-whatsapp");
+      const planRadios = document.querySelectorAll('input[name="plan-choice"]');
+
       let currentUser = null;
 
       function setText(el, text) {
@@ -719,7 +885,7 @@
         trialKeyText.textContent = key;
       }
 
-      // ===== Expires date সুন্দরভাবে (দিন মাস বছর) =====
+      // ===== Expires date সুন্দরভাবে =====
       function formatExpiryDMY(expiry) {
         if (!expiry) return "";
         const d = new Date(expiry);
@@ -743,14 +909,14 @@
         const day = String(d.getUTCDate()).padStart(2, "0");
         const month = months[d.getUTCMonth()];
         const year = d.getUTCFullYear();
-        return `${day} ${month} ${year}`; // eg. 05 Dec 2025
+        return `${day} ${month} ${year}`;
       }
 
       // Apps Script থেকে আসা ডাটা দিয়ে UI আপডেট
       function updateTrialUI(data) {
         if (!data || data.status !== "ok") {
           const msg =
-            data && data.message ? data.message : "Could not load trial info.";
+            (data && data.message) || "Could not load trial info.";
           if (trialMessage) trialMessage.textContent = "Error: " + msg;
           if (requestTrialBtn) {
             requestTrialBtn.disabled = true;
@@ -816,7 +982,6 @@
       // ===== Auth state change =====
       onAuthStateChanged(auth, async (user) => {
         if (!user) {
-          // লগইন না থাকলে main site এ পাঠাও
           window.location.href = "index.html#auth";
           return;
         }
@@ -861,6 +1026,26 @@
         });
       }
 
+      // ===== Copy key button =====
+      if (copyBtn && trialKeyText && copyHint) {
+        copyBtn.addEventListener("click", () => {
+          const key = trialKeyText.textContent || "";
+          if (!key) return;
+          navigator.clipboard
+            .writeText(key)
+            .then(() => {
+              copyHint.style.display = "block";
+              setTimeout(() => {
+                copyHint.style.display = "none";
+              }, 1500);
+            })
+            .catch((err) => {
+              console.error(err);
+              alert("Could not copy. Please copy manually.");
+            });
+        });
+      }
+
       // ===== Logout বোতাম =====
       if (logoutBtn) {
         logoutBtn.addEventListener("click", async () => {
@@ -870,6 +1055,50 @@
             console.error(e);
           }
           window.location.href = "index.html";
+        });
+      }
+
+      // ===== Plan Modal open/close + WhatsApp =====
+      function openPlanModal() {
+        if (!planModal) return;
+        if (currentUser && currentUser.email && planEmailInput) {
+          planEmailInput.value = currentUser.email;
+        }
+        planModal.style.display = "flex";
+      }
+      function closePlanModal() {
+        if (planModal) planModal.style.display = "none";
+      }
+
+      if (checkoutBtn) {
+        checkoutBtn.addEventListener("click", openPlanModal);
+      }
+      if (planCancelBtn) {
+        planCancelBtn.addEventListener("click", closePlanModal);
+      }
+      if (planModal) {
+        planModal.addEventListener("click", (e) => {
+          if (e.target === planModal) closePlanModal();
+        });
+      }
+      if (planWhatsBtn) {
+        planWhatsBtn.addEventListener("click", () => {
+          const email = (planEmailInput.value || "").trim();
+          if (!email) {
+            alert("Please enter your email address.");
+            return;
+          }
+          let plan = "Monthly Plan";
+          planRadios.forEach((r) => {
+            if (r.checked) plan = r.value;
+          });
+
+          const phone = "8801953830285";
+          const message = `${plan} - Email: ${email}`;
+          const url =
+            "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
+          window.open(url, "_blank");
+          closePlanModal();
         });
       }
     </script>
