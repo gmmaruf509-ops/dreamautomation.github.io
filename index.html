@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dream Automation - প্রফেশনাল সফটওয়্যার </title>
-<link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -632,6 +632,11 @@
         </button>
       </div>
     </div>
+
+    <!-- তোমার চাওয়া extra line (শুধু এটুকু যোগ করা হয়েছে) -->
+    <p style="margin-top:16px; text-align:center; font-size:0.9rem;">
+      আপাতত মাসিক এবং লাইফটাইম প্লান নিতে whatsapp এ যোগাযোগ করুন
+    </p>
   </section>
 
   <!-- Sign Up / Login Section -->
@@ -756,9 +761,10 @@
         if (form) form.classList.add("active");
       });
     });
-   // আলাদা করে ট্যাবগুলোর রেফারেন্স
-const signupTab = document.querySelector('.auth-tab[data-target="signup-form"]');
-const loginTab  = document.querySelector('.auth-tab[data-target="login-form"]');
+
+    // আলাদা করে ট্যাবগুলোর রেফারেন্স
+    const signupTab = document.querySelector('.auth-tab[data-target="signup-form"]');
+    const loginTab  = document.querySelector('.auth-tab[data-target="login-form"]');
 
     // ---------- Firebase Setup ----------
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
@@ -834,33 +840,32 @@ const loginTab  = document.querySelector('.auth-tab[data-target="login-form"]');
     }
 
     // Auth state change – navbar টগল + লগইন থাকলে Sign Up লুকিয়ে দাও
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    // navbar
-    if (navLoggedOut) navLoggedOut.classList.add("hidden");
-    if (navLoggedIn) navLoggedIn.classList.remove("hidden");
-    const name = user.displayName || user.email;
-    if (navUsername) navUsername.textContent = "Welcome, " + name;
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // navbar
+        if (navLoggedOut) navLoggedOut.classList.add("hidden");
+        if (navLoggedIn) navLoggedIn.classList.remove("hidden");
+        const name = user.displayName || user.email;
+        if (navUsername) navUsername.textContent = "Welcome, " + name;
 
-    // লগইন থাকলে: Sign Up ট্যাব/ফর্ম লুকাও, Login দেখাও
-    if (signupTab) signupTab.style.display = "none";
-    if (signupForm) signupForm.classList.remove("active");
+        // লগইন থাকলে: Sign Up ট্যাব/ফর্ম লুকাও, Login দেখাও
+        if (signupTab) signupTab.style.display = "none";
+        if (signupForm) signupForm.classList.remove("active");
 
-    if (loginTab) loginTab.style.display = "";
-    if (loginTab) loginTab.classList.add("active");
-    if (loginForm) loginForm.classList.add("active");
-  } else {
-    // logout হলে: আবার আগের মত Sign Up ডিফল্ট দেখাও
-    if (navLoggedOut) navLoggedOut.classList.remove("hidden");
-    if (navLoggedIn) navLoggedIn.classList.add("hidden");
+        if (loginTab) loginTab.style.display = "";
+        if (loginTab) loginTab.classList.add("active");
+        if (loginForm) loginForm.classList.add("active");
+      } else {
+        // logout হলে: আবার আগের মত Sign Up ডিফল্ট দেখাও
+        if (navLoggedOut) navLoggedOut.classList.remove("hidden");
+        if (navLoggedIn) navLoggedIn.classList.add("hidden");
 
-    if (signupTab) signupTab.style.display = "";
-    if (loginTab)  loginTab.classList.remove("active");
-    if (loginForm) loginForm.classList.remove("active");
-    if (signupForm) signupForm.classList.add("active");
-  }
-});
-
+        if (signupTab) signupTab.style.display = "";
+        if (loginTab)  loginTab.classList.remove("active");
+        if (loginForm) loginForm.classList.remove("active");
+        if (signupForm) signupForm.classList.add("active");
+      }
+    });
 
     // Logout
     const logoutBtn = document.getElementById("logout-btn");
@@ -913,5 +918,3 @@ onAuthStateChanged(auth, (user) => {
   </script>
 </body>
 </html>
-
-
